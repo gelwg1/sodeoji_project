@@ -12,8 +12,8 @@ export default function Profile() {
 
   useEffect(() => {
     async function checkUserExists() {
-      const [user] = await getUserByUsername(username);
-      if (user?.userId) {
+      const user = await getUserByUsername(username);
+      if (user?.user_id) {
         setUser(user);
       } else {
         history.push(ROUTES.NOT_FOUND);

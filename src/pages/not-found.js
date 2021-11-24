@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import Header from '../components/header';
 import { Link } from 'react-router-dom';
+import * as ROUTES from '../constants/routes'
 
 export default function NotFound() {
   useEffect(() => {
@@ -11,7 +12,7 @@ export default function NotFound() {
     <div className="bg-gray-background">
       <Header />
       <div className="mx-auto max-w-screen-lg">
-        <Link to={`/`}>
+        <Link to={ROUTES.DASHBOARD}>
           <p className="text-center text-2xl">ページが見つかりません！</p>
         </Link>
       </div>

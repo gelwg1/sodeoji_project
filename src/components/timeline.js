@@ -1,20 +1,24 @@
 /* eslint-disable no-nested-ternary */
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import LoggedInUserContext from '../context/logged-in-user';
-import usePhotos from '../hooks/use-photos';
+import usePosts from '../hooks/use-posts';
 import Post from './post';
 
-export default function Timeline() {
+export default function Timeline({type, param2}) {
   const { user } = useContext(LoggedInUserContext);
-  const { photos } = usePhotos(user);
+  var { posts } = usePosts(type, param2, user);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    if (posts) setLoading(true);
+  })
   return (
     <div className="container col-span-2">
-      {!photos ? (
+      {!loading ? (
         <Skeleton count={4} width={640} height={500} className="mb-5" />
       ) : (
-        photos.map((content) => <Post key={content.docId} content={content} />)
+        posts.map((content) => <Post content={content} />)
       )}
     </div>
   );

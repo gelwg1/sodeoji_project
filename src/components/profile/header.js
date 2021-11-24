@@ -18,13 +18,11 @@ const DialogActions = withStyles((theme) => ({
 }))(MuiDialogActions);
 
 export default function Header({
-  photosCount,
   profile: {
-    docId: profileDocId,
-    userId: profileUserId,
-    fullName,
+    key: profileKeyId,
+    user_id: profileUserId,
     username: profileUsername,
-    avatarImageSrc
+    avatar
   }
 }) {
   const { user: loggedInUser } = useContext(UserContext);
@@ -42,11 +40,10 @@ export default function Header({
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
       <div className="container flex justify-center items-center">
-        {profileUsername ? (
+        {user ? (
           <img
-            className="rounded-full h-40 w-40 flex"
-            alt={`${fullName} プロフィール写真`}
-            src={avatarImageSrc}
+            className="rounded-full  h-40 w-40 flex"
+            src={avatar}
             onError={(e) => {
               e.target.src = DEFAULT_IMAGE_PATH;
             }}
@@ -71,22 +68,16 @@ export default function Header({
 
 
         </div>
-
-        <div className="container mt-4">
-          <p className="font-medium">{!fullName ? <Skeleton count={1} height={24} /> : fullName}</p>
-        </div>
       </div>
     </div>
   );
 }
 
 Header.propTypes = {
-  photosCount: PropTypes.number.isRequired,
   profile: PropTypes.shape({
-    docId: PropTypes.string,
-    userId: PropTypes.string,
-    fullName: PropTypes.string,
+    key: PropTypes.string,
+    user_id: PropTypes.string,
     username: PropTypes.string,
-    avatarImageSrc: PropTypes.array
+    avatar: PropTypes.array
   }).isRequired
 };

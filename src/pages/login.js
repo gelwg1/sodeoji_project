@@ -7,27 +7,27 @@ export default function Login() {
   const history = useHistory();
   const { firebase } = useContext(FirebaseContext);
 
-  const [emailAddress, setEmailAddress] = useState('');
+  const [username, serUsername] = useState('');
   const [password, setPassword] = useState('');
 
   const [error, setError] = useState('');
-  const isInvalid = password === '' || emailAddress === '';
+  const isInvalid = password === '' || username === '';
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
-      await firebase.auth().signInWithEmailAndPassword(emailAddress, password);
+      await firebase.auth().signInWithEmailAndPassword(username + '@gmail.com', password);
       history.push(ROUTES.DASHBOARD);
     } catch (error) {
-      setEmailAddress('');
+      serUsername('');
       setPassword('');
-      setError("Eメールあるいはパスワードがあるかもしれない！");
+      setError("このアカウントがない！");
     }
   };
 
   useEffect(() => {
-    document.title = 'Margatsni - ログイン';
+    document.title = 'ログイン';
   }, []);
 
   return (
@@ -46,12 +46,12 @@ export default function Login() {
 
           <form onSubmit={handleLogin} method="POST">
             <input
-              aria-label="メールを入力"
+              aria-label="ユーザー名を入力"
               type="text"
-              placeholder="Eメール"
+              placeholder="ユーザー名"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setEmailAddress(target.value)}
-              value={emailAddress}
+              onChange={({ target }) => serUsername(target.value)}
+              value={username}
             />
             <input
               aria-label="パスワードを入力"

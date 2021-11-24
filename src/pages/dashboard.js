@@ -5,9 +5,12 @@ import Timeline from '../components/timeline';
 import useUser from '../hooks/use-user';
 import LoggedInUserContext from '../context/logged-in-user';
 import Sidebar from '../components/sidebar'
+import { useParams } from "react-router-dom";
 
 export default function Dashboard({ user: loggedInUser }) {
   const { user, setActiveUser } = useUser(loggedInUser.uid);
+  var { type, param2 } = useParams();
+
   useEffect(() => {
     document.title = 'ホーム';
   }, []);
@@ -19,11 +22,11 @@ export default function Dashboard({ user: loggedInUser }) {
         <div className="grid grid-cols-3">
           <Sidebar />
           <div className="justify-between mx-auto max-w-screen-lg">
-            <Timeline />
+            <Timeline type={type} param2={param2}/>
           </div>
         </div>
       </div>
-    </LoggedInUserContext.Provider>
+    </LoggedInUserContext.Provider >
   );
 }
 

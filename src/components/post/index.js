@@ -2,9 +2,11 @@ import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Image from './image';
+import Body from './body';
+import Footer from './footer'
 import Actions from './actions';
-import Footer from './footer';
 import Comments from './comments';
+
 
 export default function Post({ content }) {
   const commentInput = useRef(null);
@@ -12,35 +14,35 @@ export default function Post({ content }) {
 
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12">
-      <Header username={content.username} avatarImageSrc={content.avatarImageSrc}/>
-      <Image src={content.imageSrc} caption={content.caption} />
-      <Actions
-        docId={content.docId}
-        totalLikes={content.likes.length}
-        likedPhoto={content.userLikedPhoto}
+      <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date}/>
+      <Image src={content?.image_url}/>
+      {/* <Actions
+        docId={content?.docId}
         handleFocus={handleFocus}
-      />
-      <Footer caption={content.caption} username={content.username} />
-      <Comments
-        docId={content.docId}
-        comments={content.comments}
-        posted={content.dateCreated}
+      /> */}
+      <Body postId={content.key} title={content?.title} content={content?.content}/>
+      <Footer votes={content?.vote_numbers} comments={content?.comment_numbers}/>
+      {/* <Comments
+        docId={content?.docId}
+        comments={content?.comments}
+        posted={content?.dateCreated}
         commentInput={commentInput}
-      />
+      /> */}
     </div>
   );
 }
 
 Post.propTypes = {
   content: PropTypes.shape({
-    username: PropTypes.string.isRequired,
-      avatarImageSrc: PropTypes.string.isRequired,
-    imageSrc: PropTypes.string.isRequired,
-    caption: PropTypes.string.isRequired,
-    docId: PropTypes.string.isRequired,
-    userLikedPhoto: PropTypes.bool.isRequired,
-    likes: PropTypes.array.isRequired,
-    comments: PropTypes.array.isRequired,
-    dateCreated: PropTypes.number.isRequired
+    key: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    author_avatar: PropTypes.string.isRequired,
+    image_url: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
+    create_date: PropTypes.number.isRequired,
+    // comments: PropTypes.array.isRequired,
+    comment_numbers: PropTypes.number.isRequired,
+    vote_numbers: PropTypes.number.isRequired
   })
 };

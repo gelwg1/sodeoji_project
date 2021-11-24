@@ -1,26 +1,26 @@
 import Firebase from 'firebase/app';
-import 'firebase/firestore';
+import 'firebase/database';
 import 'firebase/auth';
 import 'firebase/storage';
 
-// import {seedDatabase} from '../seed';
+const firebaseConfig = {
+    apiKey: "AIzaSyBeC-c6MADBtwt71QFsV7uVhW7JjHS4F00",
+    authDomain: "sodeoji-project.firebaseapp.com",
+    databaseURL: "https://sodeoji-project-default-rtdb.firebaseio.com",
+    projectId: "sodeoji-project",
+    storageBucket: "sodeoji-project.appspot.com",
+    messagingSenderId: "490911698729",
+    appId: "1:490911698729:web:541f65e4e34cbd346eb138",
+    measurementId: "G-11LQRQG8KY"
+  };
 
-const config = {
-    apiKey: "AIzaSyAKB2P8UIf0XNqE80TfWVsXba-Ca4sPvPM",
-    authDomain: "margatsni-itss.firebaseapp.com",
-    projectId: "margatsni-itss",
-    storageBucket: "margatsni-itss.appspot.com",
-    messagingSenderId: "510433080525",
-    appId: "1:510433080525:web:326a8b8bf47523732e2584"
-};
-
-const firebase = Firebase.initializeApp(config);
-const { FieldValue } = Firebase.firestore;
+const firebase = Firebase.initializeApp(firebaseConfig);
+const database = Firebase.database();
 const storage = Firebase.storage();
 
 // Create Seed data
 // seedDatabase(firebase);
-export { firebase, FieldValue, storage };
+export { firebase, database, storage };
 
 export const uiConfig = {
     signInFlow: 'popup',

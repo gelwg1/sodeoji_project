@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Navbar, NavDropdown, Nav, Container } from 'react-bootstrap';
 import FirebaseContext from '../context/firebase';
 import UserContext from '../context/user';
@@ -18,11 +18,9 @@ export default function Header() {
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
-            <h1 className="flex justify-center w-full">
-              <Link to={ROUTES.DASHBOARD} aria-label="logo">
-                <img src="/images/logo.png" alt="Logo" className="mt-2 w-2/5 h-2/5" />
-              </Link>
-            </h1>
+            <a className="flex justify-center w-full" href={ROUTES.DASHBOARD}>
+                <img aria-label="logo" src="/images/logo.png" alt="Logo" className="mt-2 w-2/5 h-2/5" />
+            </a>
           </div>
           <div className="text-gray-700 text-center flex items-center align-items">
             <>

@@ -1,28 +1,37 @@
-import { firebase, FieldValue, storage } from '../lib/firebase';
+import { firebase, database, storage } from '../lib/firebase';
 
-export async function doesUsernameExist(username) {
-  const result = await firebase
-    .firestore()
-    .collection('users')
-    .where('username', '==', username)
-    .get();
+function snapshotToArray(snapshot) {
+  var returnArr = [];
 
-  return result.docs.length > 0;
-}
+  snapshot.forEach(function (childSnapshot) {
+    var item = childSnapshot.val();
+    item.key = childSnapshot.key;
+
+    returnArr.push(item);
+  });
+
+  return returnArr;
+};
 
 export async function getUserByUsername(username) {
-  const result = await firebase
-    .firestore()
-    .collection('users')
-    .where('username', '==', username)
-    .get();
+  let result;
+  await database.ref('Users').orderByChild("username").equalTo(username).once("value", snapshot => {
+    if (snapshot.exists()) {
+      result = snapshotToArray(snapshot)[0];
+    }
+  });
 
-  return result.docs.map((item) => ({
-    ...item.data(),
-    docId: item.id
-  }));
+  return result;
 }
 
+export async function arrayOfGroup() {
+  var result = [];
+  await database
+    .ref('Group')
+    .on('value', function (snap) { result = snap.val() });
+
+  return result;
+}
 // export async function getUserAvatarByUserId(userId) {
 //   const result = await firebase
 //     .firestore()
@@ -39,13 +48,14 @@ export async function getUserByUsername(username) {
 
 
 export async function getUserByUserId(userId) {
-  const result = await firebase.firestore().collection('users').where('userId', '==', userId).get();
-  const user = result.docs.map((item) => ({
-    ...item.data(),
-    docId: item.id
-  }));
+  let result;
+  await database.ref('Users').orderByChild("user_id").equalTo(userId).once("value", snapshot => {
+    if (snapshot.exists()) {
+      result = snapshotToArray(snapshot)[0];
+    }
+  });
 
-  return user;
+  return result;
 }
 
 export async function getPhotoByPhotoId(photoId) {
@@ -59,9 +69,9 @@ export async function getPhotoByPhotoId(photoId) {
 }
 
 export async function updateLoggedInUserFollowing(
-  loggedInUserDocId, 
-  profileId, 
-  isFollowingProfile 
+  loggedInUserDocId,
+  profileId,
+  isFollowingProfile
 ) {
   return firebase
     .firestore()
@@ -69,15 +79,15 @@ export async function updateLoggedInUserFollowing(
     .doc(loggedInUserDocId)
     .update({
       following: isFollowingProfile
-        ? FieldValue.arrayRemove(profileId)
-        : FieldValue.arrayUnion(profileId)
+        ? database.arrayRemove(profileId)
+        : database.arrayUnion(profileId)
     });
 }
 
 export async function updateFollowedUserFollowers(
-  profileDocId, 
-  loggedInUserDocId, 
-  isFollowingProfile 
+  profileDocId,
+  loggedInUserDocId,
+  isFollowingProfile
 ) {
   return firebase
     .firestore()
@@ -85,8 +95,8 @@ export async function updateFollowedUserFollowers(
     .doc(profileDocId)
     .update({
       followers: isFollowingProfile
-        ? FieldValue.arrayRemove(loggedInUserDocId)
-        : FieldValue.arrayUnion(loggedInUserDocId)
+        ? database.arrayRemove(loggedInUserDocId)
+        : database.arrayUnion(loggedInUserDocId)
     });
 }
 
@@ -118,76 +128,46 @@ export async function getPhotos(userId, following) {
   return photosWithUserDetails;
 }
 
-export async function getPhotosUpdate(userId, following) {
-  following.push(userId);
-  const result = await firebase
-    .firestore()
-    .collection('photos')
-    .where('userId', 'in', following)
-    .get();
-
-  const userFollowedPhotos = result.docs.map((photo) => ({
-    ...photo.data(),
-    docId: photo.id
-  }));
-
-  const photosWithUserDetails = await Promise.all(
-    userFollowedPhotos.map(async (photo) => {
-      let userLikedPhoto = false;
-      if (photo.likes.includes(userId)) {
-        userLikedPhoto = true;
-      }
-      const user = await getUserByUserId(photo.userId);
-      const { username, avatarImageSrc } = user[0];
-      // alert(avatarImageSrc);
-      return { username, avatarImageSrc, ...photo, userLikedPhoto };
-    })
-  );
-
-  return photosWithUserDetails;
-}
-
-export async function getUserPhotosByUserId(userId) {
-  const result = await firebase
-    .firestore()
-    .collection('photos')
-    .where('userId', '==', userId)
-    .get();
-
-  const photos = result.docs.map((photo) => ({
-    ...photo.data(),
-    docId: photo.id
-  }));
-  return photos;
-}
-
-export async function toggleFollow(
-  isFollowingProfile,
-  activeUserDocId,
-  profileDocId,
-  profileUserId,
-  followingUserId
-) {
-  await updateLoggedInUserFollowing(activeUserDocId, profileUserId, isFollowingProfile);
-  await updateFollowedUserFollowers(profileDocId, followingUserId, isFollowingProfile);
+export async function getPosts(type, param2, user) {
+  var result;
+  await database
+    .ref('Posts')
+    .once("value", snapshot => {
+      result = snapshotToArray(snapshot);
+    });
+  switch (type) {
+    case "post-details":
+      result = result.filter((item) => {
+        return item.key == param2;
+      });
+      break;
+    case "post":
+    case "save":
+    default:
+      result = result.filter((item) => {
+        return (user?.group == item.group)
+      })
+      break;
+  }
+  return result;
 }
 
 export async function updateUserProfile(
   docId,
   newFullName
-  ){
-    firebase
+) {
+  firebase
     .firestore()
     .collection('users')
     .doc(docId)
     .update({
       fullName: newFullName
     })
-    .then(function(){
+    .then(function () {
       window.location.reload();
       console.log('User update with ID', docId);
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.error("Error updating user", error);
     });
 
@@ -195,19 +175,19 @@ export async function updateUserProfile(
 export async function updatePost(
   docId,
   newCaption
-  ){
-    firebase
+) {
+  firebase
     .firestore()
     .collection('photos')
     .doc(docId)
     .update({
       caption: newCaption
     })
-    .then(function(){
+    .then(function () {
       window.location.reload();
       console.log('Photo update with ID', docId);
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.error("Error updating photo", error);
     });
 
@@ -215,17 +195,17 @@ export async function updatePost(
 
 export async function deletePost(
   docId
-  ){
-    firebase
+) {
+  firebase
     .firestore()
     .collection('photos')
     .doc(docId)
     .delete()
-    .then(function(){
+    .then(function () {
       window.location.reload();
       console.log('Photo delete with ID', docId);
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.error("Error deleting photo", error);
     });
 
@@ -233,46 +213,46 @@ export async function deletePost(
 
 export async function updateAvatar(
   avatar, docId
-  ){
-    console.log('avatar func', avatar);
-    // let urlName = Date.now() + avatar?.name;
-    // let newUrlAvatar = '';
+) {
+  console.log('avatar func', avatar);
+  // let urlName = Date.now() + avatar?.name;
+  // let newUrlAvatar = '';
 
-      const uploadTask = storage
-      .ref(`/avatars/${avatar?.name}`).put(avatar);
-      
-      uploadTask.on(
-        "state_changed",
-        snapShot => {},
-        error =>{
-          console.error("Error updating user", error);
-      },
-      () =>{
-        storage
-    .ref()
+  const uploadTask = storage
+    .ref(`/avatars/${avatar?.name}`).put(avatar);
+
+  uploadTask.on(
+    "state_changed",
+    snapShot => { },
+    error => {
+      console.error("Error updating user", error);
+    },
+    () => {
+      storage
+        .ref()
         .child(`/avatars/${avatar?.name}`)
         .getDownloadURL()
-        .then(url =>{
+        .then(url => {
           console.log('url', url);
           // newUrlAvatar = url;
           // console.log('newUrlAvatar', newUrlAvatar);
 
           firebase
-          .firestore()
-          .collection('users')
-          .doc(docId)
-          .update({
-            avatarImageSrc: url
-          })
-          .then(function(){
-            //window.location.reload()
-            console.log('User update avatar with ID', docId);
-          })
-          .catch(function(error){
-            console.error("Error updating user", error);
-          });
+            .firestore()
+            .collection('users')
+            .doc(docId)
+            .update({
+              avatarImageSrc: url
+            })
+            .then(function () {
+              //window.location.reload()
+              console.log('User update avatar with ID', docId);
+            })
+            .catch(function (error) {
+              console.error("Error updating user", error);
+            });
 
         });
-      }
-      );
+    }
+  );
 };

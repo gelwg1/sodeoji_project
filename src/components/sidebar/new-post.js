@@ -1,35 +1,38 @@
 import { useState, React, useContext } from 'react';
 import FirebaseContext from '../../context/firebase';
+import {Fab, Grid} from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import {Fab, Grid } from '@material-ui/core';
+import * as DEFAULT_IMAGE_PATH from '../../constants/paths'
 
-  export default function EditProfile({user, handleClose}) {
+export default function NewPost({user, handleClose}) {
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
     const [imgPost, setImgPost] = useState('');
     const [imageSrc, setImageSrc] = useState('');
     const { database, storage } = useContext(FirebaseContext);
 
-    // Update password
-    const [password, setPassword] = useState('');
-    const [passwordCheck, setPasswordCheck] = useState('');
+    const isInvalid = content === '' || imageSrc === '' || title === '';
 
-    const isInvalid = (password === '' || passwordCheck === '') && imageSrc === '';
+    const handlePost = async (event) => {
+        event.preventDefault();
+        await database
+        .ref('Posts')
+        .push({
+          author: user?.username,
+          author_avatar: DEFAULT_IMAGE_PATH,
+          comment_numbers: 0,
+          content: content,
+          create_date: Date.now(),
+          group: user?.group,
+          image_url: imageSrc,
+          title: title,
+          vote_numbers: 0
 
-    // Update
-    const handleUpdateUserProfile = async (event) => {
-      if (password !== '' && password === passwordCheck) {
-        event.preventDefault();
-        console.log("ok");
-      }
-      if (imageSrc !== '')
-      {
-        event.preventDefault();
-        console.log("ok");
-      }
-      window.location.reload();
+    });
+        window.location.reload();
     };
 
     const onImageChange = (event) => {
-      
         if (event.target.files && event.target.files[0]) {
           let reader = new FileReader();
           reader.onload = (e) => {
@@ -39,8 +42,7 @@ import {Fab, Grid } from '@material-ui/core';
         }
         const file = event.target.files[0];
         const storageRef = storage.ref();
-        let urlName = Date.now() + file.name;
-        const fileRef = storageRef.child(`/avatars/${urlName}`);
+        const fileRef = storageRef.child(`/posts/${file.name}`);
         fileRef.put(file).then(() => {
             fileRef.getDownloadURL().then(function (url) {
                 setImageSrc(url);
@@ -50,7 +52,7 @@ import {Fab, Grid } from '@material-ui/core';
 
     return (
         <>
-          <div className="flex flex-col bg-white p-4 rounded width-post">
+        <div className="flex flex-col bg-white p-4 rounded width-post">
             <div className="p-4 py-5">
                 <Grid container justify="center" alignItems="center">
                     <input
@@ -71,32 +73,31 @@ import {Fab, Grid } from '@material-ui/core';
             </div>
 
             <input
-              type="password"
-              placeholder="パスワード確認"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setPassword(target.value)}
-              value={password}
-            />
+                type="text"
+                placeholder="タイトル"
+                className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                onChange={({ target }) => setTitle(target.value)}
+                />
+
             <input
-              type="password"
-              placeholder="フールネーム"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setPasswordCheck(target.value)}
-              value={passwordCheck}
-            />
+                type="text"
+                placeholder="コンテンツ"
+                className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                onChange={({ target }) => setContent(target.value)}
+                />
 
             <div>
-                <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}   
-                disabled={isInvalid}  
-                onClick = {handleUpdateUserProfile}> 保存
+                <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}    
+                disabled={isInvalid} 
+                onClick = {handlePost}> 保存
                 </button>
                 <a className={`pt-1`}> </a>
 
-                <button className={` bg-blue-medium text-white w-45 rounded h-8 font-bold `}     
+                <button className={` bg-blue-medium text-white w-45 rounded h-8 font-bold`}     
                 onClick={handleClose}
                 > キャンセル
                 </button>
-            </div>  
+            </div>   
         </div>
     </>
     );
