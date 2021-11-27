@@ -32,19 +32,20 @@ export async function arrayOfGroup() {
 
   return result;
 }
-// export async function getUserAvatarByUserId(userId) {
-//   const result = await firebase
-//     .firestore()
-//     .collection('users')
-//     .where('userId', '==', userId)
-//     .get();
 
-//   const photos = result.docs.map((photo) => ({
-//     ...photo.data(),
-//     docId: photo.id
-//   }));
-//   return photos;
-// }
+export async function getUserAvatarByUserId(userId) {
+  const result = await firebase
+    .firestore()
+    .collection('users')
+    .where('userId', '==', userId)
+    .get();
+
+  const photos = result.docs.map((photo) => ({
+    ...photo.data(),
+    docId: photo.id
+  }));
+  return photos;
+}
 
 
 export async function getUserByUserId(userId) {
