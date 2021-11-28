@@ -11,10 +11,11 @@ export default function NewPost({user, handleClose}) {
     const [imageSrc, setImageSrc] = useState('');
     const { database, storage } = useContext(FirebaseContext);
 
-    const isInvalid = content === '' || imageSrc === '' || title === '';
+    const isInvalid = content === '' || title === '';
 
     const handlePost = async (event) => {
         event.preventDefault();
+        console.log(user);
         await database
         .ref('Posts')
         .push({

@@ -5,7 +5,8 @@ import * as ROUTES from '../constants/routes';
 
 export default function Login() {
   const history = useHistory();
-  const { firebase } = useContext(FirebaseContext);
+  const { firebase, database } = useContext(FirebaseContext);
+  
 
   const [username, serUsername] = useState('');
   const [password, setPassword] = useState('');
