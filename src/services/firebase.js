@@ -25,10 +25,11 @@ export async function getUserByUsername(username) {
 }
 
 export async function arrayOfGroup() {
-  var result = [];
-  await database
+  const snapshot = await database
     .ref('Group')
-    .on('value', function (snap) { result = snap.val() });
+    .once('value');
+
+  const result = snapshot.val();
 
   return result;
 }
@@ -130,26 +131,27 @@ export async function getPhotos(userId, following) {
 }
 
 export async function getPosts(type, param2, user) {
-  var result;
-  await database
+  const snapshot = await database
     .ref('Posts')
-    .once("value", snapshot => {
-      result = snapshotToArray(snapshot);
-    });
+    .once("value");
+
+  var result = snapshotToArray(snapshot);
   switch (type) {
     case "post-details":
-      result = result.filter((item) => {
+      result = await Promise.all (result.filter((item) => {
         return item.key == param2;
-      });
+      }));
       break;
     case "post":
     case "save":
     default:
-      result = result.filter((item) => {
+      result = await Promise.all (result.filter((item) => {
         return (user?.group == item.group)
-      })
+      }));
       break;
   }
+
+  // console.log(result);
   return result;
 }
 

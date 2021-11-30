@@ -10,9 +10,10 @@ export default function usePosts(type, param2, user) {
       PostList.sort((a, b) => b.vote_numbers - a.vote_numbers);
       setPosts(PostList);
     }
+    console.log(user, posts);
 
     getTimelinePosts();
-  });
+  }, [posts?.length]);
 
   return { posts };
 }

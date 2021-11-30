@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
-import { arrayOfGroup } from '../services/firebase';
+import useGroups from '../hooks/use-groups';
 
 export default function SignUp() {
   const history = useHistory();
@@ -12,8 +12,9 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [passwordCheck, setPasswordCheck] = useState('');
 
-  const [groups, setGroups] = useState();
-  const [group, setGroup] = useState('');
+  var { groups } = useGroups();
+  const [group, setGroup] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState('');
   const isInvalid = password === '' || username === '' || group === '' || passwordCheck === '';
@@ -61,18 +62,18 @@ export default function SignUp() {
   function Options({ options }) {
     return (
       <>
-        {options.map((option) =>
-          <option value={option}>{option}</option>
+        {options.map((option, key) =>
+          <option key={key} value={option}>{option}</option>
         )}
       </>
     )
   }
-  async function getGroups() { setGroups(await arrayOfGroup()) };
 
   useEffect(() => {
-    getGroups();
+    console.log(groups);
+    if (groups) setLoading(false);
     document.title = 'サインアップ';
-  }, []);
+  }, [groups]);
 
   return (
     <div className="mx-auto max-w-screen-md">
@@ -91,35 +92,41 @@ export default function SignUp() {
             <input
               type="text"
               placeholder="ユーザー名"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setUsername(target.value)}
               value={username}
             />
             <input
               type="password"
               placeholder="パスワード"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setPassword(target.value)}
               value={password}
             />
             <input
               type="password"
               placeholder="パスワード確認"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setPasswordCheck(target.value)}
               value={passwordCheck}
             />
-            <select
-              placeholder="グルプル選択"
-              className="text-sm text-gray-base w-full mr-3 py-4 px-4 h-8 border border-gray-primary rounded mb-2"
-              onChange={({ target }) => setGroup(target.value)}
-              value={group}>
-              {groups && <Options options={groups}/>}
-            </select>
+            {loading ?
+              (
+                <></>
+              ) : (
+                <select
+                  className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
+                  onChange={({ target }) => setGroup(target.value)}
+                  value={`${group}`}>
+                  <option hidden>グルプル選択</option>
+                  {groups && <Options options={groups} />}
+                </select>
+              )}
+
             <button
               disabled={isInvalid}
               type="submit"
-              className={`bg-blue-medium text-white w-full rounded h-8 font-bold
+              className={`bg-blue-medium text-white w-full rounded h-16 font-bold
             ${isInvalid && 'opacity-50'}`}
             >
               サインアップ
