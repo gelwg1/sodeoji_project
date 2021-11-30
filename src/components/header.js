@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Header() {
   const { user: loggedInUser } = useContext(UserContext);
-  const { user } = useUser(loggedInUser?.displayName);
+  const { user } = useUser(loggedInUser?.uid);
   const { firebase } = useContext(FirebaseContext);
   const history = useHistory();
 

@@ -31,12 +31,12 @@ export default function SignUp() {
           displayName: username
         });
 
-        console.log(createdUserResult);
+        console.log(createdUserResult.user);
 
         await database
           .ref('/Users')
           .push({
-            uid: createdUserResult.uid,
+            user_id: createdUserResult.user.uid,
             avatar: '',
             group: group,
             username: username,
