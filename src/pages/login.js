@@ -50,7 +50,7 @@ export default function Login() {
               aria-label="ユーザー名を入力"
               type="text"
               placeholder="ユーザー名"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
               onChange={({ target }) => serUsername(target.value)}
               value={username}
             />
@@ -58,14 +58,14 @@ export default function Login() {
               aria-label="パスワードを入力"
               type="password"
               placeholder="パスワード"
-              className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setPassword(target.value)}
               value={password}
             />
             <button
               disabled={isInvalid}
               type="submit"
-              className={`bg-blue-medium text-white w-full rounded h-8 font-bold 
+              className={`bg-blue-medium text-white w-full rounded h-16 font-bold 
             ${isInvalid && 'opacity-50'}`}
             >
               ログイン

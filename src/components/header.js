@@ -5,7 +5,6 @@ import FirebaseContext from '../context/firebase';
 import UserContext from '../context/user';
 import useUser from '../hooks/use-user';
 import * as ROUTES from '../constants/routes';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function Header() {
   const { user: loggedInUser } = useContext(UserContext);
@@ -18,8 +17,8 @@ export default function Header() {
       <div className="container mx-auto max-w-screen-lg h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
-            <a className="flex justify-center w-full" href={ROUTES.DASHBOARD}>
-                <img aria-label="logo" src="/images/logo.png" alt="Logo" className="mt-2 w-2/5 h-2/5" />
+            <a className="w-full" href={ROUTES.DASHBOARD}>
+                <img aria-label="logo" src="/images/logo.png" alt="Logo" className="w-2/5 h-full" />
             </a>
           </div>
           <div className="text-gray-700 text-center flex items-center align-items">

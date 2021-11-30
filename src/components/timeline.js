@@ -4,6 +4,7 @@ import Skeleton from 'react-loading-skeleton';
 import LoggedInUserContext from '../context/logged-in-user';
 import usePosts from '../hooks/use-posts';
 import Post from './post';
+import 'react-loading-skeleton/dist/skeleton.css'
 
 export default function Timeline({type, param2}) {
   const { user } = useContext(LoggedInUserContext);

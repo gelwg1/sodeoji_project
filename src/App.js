@@ -1,10 +1,10 @@
 import { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import ReactLoader from './components/loader';
 import * as ROUTES from './constants/routes';
 import UserContext from './context/user';
 import useAuthListener from './hooks/use-auth-listener';
-
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ProtectedRoute from './helpers/protected-route';
 
 const Login = lazy(() => import('./pages/login'));
@@ -23,6 +23,15 @@ export default function App() {
       <Router>
         <Suspense fallback={<ReactLoader />}>
           <Switch>
+            <Route
+              exact
+              path="/"
+              render={() => {
+                return (
+                  <Redirect to={`${ROUTES.DASHBOARD}`} />
+                )
+              }}
+            />
             <Route path={ROUTES.LOGIN} component={Login} />
             <Route path={ROUTES.SIGN_UP} component={SignUp} />
             <Route path={ROUTES.PROFILE} component={Profile} />

@@ -29,53 +29,51 @@ export default function Sidebar() {
         setOpen(false);
     };
     return (
-        <div className="bg-white h-screen w-2/5 border-gray-primary border">
-            <>
-                <Navbar className="bg-blue-medium after:bg-blue-medium mx-auto mt-4 w-70">
-                    <Container className="justify-content-center">
-                        <Navbar.Brand className="text-white" href={ROUTES.DASHBOARD}>ホーム</Navbar.Brand>
-                    </Container>
-                </Navbar>
-                <hr />
-                {window.location.pathname.includes(ROUTES.DASHBOARD) ? (
-                    <>
-                        <Navbar className="bg-blue-medium mx-auto w-70">
-                            <Container className="justify-content-center align-items-center">
-                                <Navbar.Brand>
-                                    <button className="text-white" onClick={handleClickOpen}>
-                                        ポスト作成
-                                    </button></Navbar.Brand>
-                                <Dialog open={open}>
-                                    <DialogActions>
-                                        <NewPost user={user} handleClose={handleClose} />
-                                    </DialogActions>
-                                </Dialog>
-                            </Container>
-                        </Navbar>
-                        <hr />
-                        <Navbar className="w-70 mx-auto">
-                            <Container className="justify-content-center align-items-center">
-                                <Navbar.Brand>ポストフィルター</Navbar.Brand>
-                            </Container>
-                        </Navbar>
-                        <Navbar className="bg-blue-medium mx-auto mt-4 w-70">
-                            <Container className="justify-content-center align-items-center">
-                                <Navbar.Brand className="text-white" href={ROUTES.DASHBOARD}>全てのポスト</Navbar.Brand>
-                            </Container>
-                        </Navbar>
-                        <Navbar className="bg-blue-medium mx-auto mt-4 w-70">
-                            <Container className="justify-content-center align-items-center">
-                                <Navbar.Brand className="text-white" href={`/dashboard/post/${user?.username}`}>私のポスト</Navbar.Brand>
-                            </Container>
-                        </Navbar>
-                        <Navbar className="bg-blue-medium mx-auto mt-4 w-70">
-                            <Container className="justify-content-center align-items-center">
-                                <Navbar.Brand className="text-white" href={`/dashboard/save/${user?.username}`}>保存ポスト</Navbar.Brand>
-                            </Container>
-                        </Navbar>
-                    </>
-                ) : null}
-            </>
+        <div className="bg-white h-screen w-30 border-gray-primary border flex flex-col items-center">
+            <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                <Container className="flex flex-col justify-center items-center">
+                    <Navbar.Brand className="text-white text-xl" href={ROUTES.DASHBOARD}>ホーム</Navbar.Brand>
+                </Container>
+            </Navbar>
+            <hr className="w-full mt-4" />
+            {window.location.pathname.includes(ROUTES.DASHBOARD) ? (
+                <>
+                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand>
+                                <button className="text-white text-xl" onClick={handleClickOpen}>
+                                    ポスト作成
+                                </button></Navbar.Brand>
+                            <Dialog open={open}>
+                                <DialogActions>
+                                    <NewPost user={user} handleClose={handleClose} />
+                                </DialogActions>
+                            </Dialog>
+                        </Container>
+                    </Navbar>
+                    <hr className="w-full mt-4" />
+                    <Navbar className="mx-auto w-full mt-2">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-xl">ポストフィルター</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar className="bg-blue-medium mx-auto w-full mt-2">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={ROUTES.DASHBOARD}>全てのポスト</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={`/dashboard/post/${user?.username}`}>私のポスト</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={`/dashboard/save/${user?.username}`}>保存ポスト</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                </>
+            ) : null}
         </div>
     );
 }
