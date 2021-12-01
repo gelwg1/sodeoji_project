@@ -2,7 +2,7 @@ import { useState, React, useContext } from 'react';
 import FirebaseContext from '../../context/firebase';
 import {Fab, Grid} from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import * as DEFAULT_IMAGE_PATH from '../../constants/paths'
+import * as DEFAULT_IMAGE_PATH from '../../constants/paths';
 
 export default function NewPost({user, handleClose}) {
     const [title, setTitle] = useState('');
@@ -15,7 +15,9 @@ export default function NewPost({user, handleClose}) {
 
     const handlePost = async (event) => {
         event.preventDefault();
+
         console.log(user);
+        
         await database
         .ref('Posts')
         .push({
