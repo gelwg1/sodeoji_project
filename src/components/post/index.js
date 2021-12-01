@@ -14,7 +14,7 @@ export default function Post({ content }) {
 
   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12">
-      <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date}/>
+      <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date} content={content}/>
       <Image src={content?.image_url}/>
       {/* <Actions
         docId={content?.docId}
