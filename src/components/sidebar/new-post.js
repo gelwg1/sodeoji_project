@@ -15,9 +15,6 @@ export default function NewPost({user, handleClose}) {
 
     const handlePost = async (event) => {
         event.preventDefault();
-
-        console.log(user);
-        
         await database
         .ref('Posts')
         .push({
@@ -48,6 +45,9 @@ export default function NewPost({user, handleClose}) {
         const fileRef = storageRef.child(`/posts/${file.name}`);
         fileRef.put(file).then(() => {
             fileRef.getDownloadURL().then(function (url) {
+                while (url=='')
+                    console.log(url);
+
                 setImageSrc(url);
            });
         })

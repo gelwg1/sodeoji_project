@@ -19,7 +19,7 @@ const DialogActions = withStyles((theme) => ({
 
 export default function Sidebar() {
     const { user: loggedInUser } = useContext(UserContext);
-    const { user } = useUser(loggedInUser?.displayName);
+    const { user } = useUser(loggedInUser?.uid);
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
