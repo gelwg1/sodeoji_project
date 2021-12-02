@@ -16,7 +16,8 @@ export default function EditPostInfor({content, handleClose}) {
         event.preventDefault();
         await database
         .ref('Posts')
-        .push({
+        .child(content.key)
+        .update({
           content: newContent,
           create_date: Date.now(),
           image_url: newImageSrc,
@@ -73,7 +74,7 @@ export default function EditPostInfor({content, handleClose}) {
             タイトル:
             <input
                 type="text"
-                placeholder={content.title}
+                defaultValue={content.title}
                 className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 onChange={({ target }) => setTitle(target.value)}
                 />
@@ -82,7 +83,7 @@ export default function EditPostInfor({content, handleClose}) {
             コンテンツ:
             <input
                 type="text"
-                placeholder={content.content}
+                defaultValue={content.content}
                 className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 onChange={({ target }) => setContent(target.value)}
                 />
