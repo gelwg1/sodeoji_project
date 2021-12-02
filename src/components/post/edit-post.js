@@ -3,29 +3,25 @@ import FirebaseContext from '../../context/firebase';
 import {Fab, Grid} from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
-export default function NewPost({userId, handleClose}) {
-    const [content, setContent] = useState('');
-    const [imgPost, setImgPost] = useState('');
-    const [imageSrc, setImageSrc] = useState('');
-    const { firebase } = useContext(FirebaseContext);
+export default function EditPostInfor({content, handleClose}) {
+    const [newTitle, setTitle] = useState('');
+    const [newContent, setContent] = useState('');
+    const [newImgPost, setImgPost] = useState('');
+    const [newImageSrc, setImageSrc] = useState('');
+    const { database, storage } = useContext(FirebaseContext);
 
-    const isInvalid = content === '' || imageSrc === '';
-
-    const handlePostImage = async (event) => {
+    const isInvalid = newContent === '' || newTitle === '';
+   
+    const handleUpdate = async (event) => {
         event.preventDefault();
-        await firebase
-        .firestore()
-        .collection('photos')
-        .add({
-          userId: userId,
-          imageSrc: imageSrc,
-          caption: content,
-          likes: [],
-          comments: [],
-          userLatitude: '40.7128°',
-          userLongitude: '74.0060°',
-          dateCreated: Date.now()
-
+        await database
+        .ref('Posts')
+        .child(content.key)
+        .update({
+          content: newContent,
+          create_date: Date.now(),
+          image_url: newImageSrc,
+          title: newTitle,
     });
         window.location.reload();
     };
@@ -39,10 +35,13 @@ export default function NewPost({userId, handleClose}) {
           reader.readAsDataURL(event.target.files[0]);
         }
         const file = event.target.files[0];
-        const storageRef = firebase.storage().ref();
+        const storageRef = storage.ref();
         const fileRef = storageRef.child(`/posts/${file.name}`);
         fileRef.put(file).then(() => {
             fileRef.getDownloadURL().then(function (url) {
+                while (url=='')
+                    console.log(url);
+
                 setImageSrc(url);
            });
         })
@@ -51,6 +50,7 @@ export default function NewPost({userId, handleClose}) {
     return (
         <>
         <div className="flex flex-col bg-white p-4 rounded width-post">
+            <img src={content.image_url} />
             <div className="p-4 py-5">
                 <Grid container justify="center" alignItems="center">
                     <input
@@ -67,20 +67,31 @@ export default function NewPost({userId, handleClose}) {
                     </Fab>
                     </label>
                 </Grid>
-                { imgPost && <img id="target" className="padding-login" src={imgPost.image}/> }
+                { newImgPost && <img id="target" className="padding-login" src={newImgPost.image}/> }
             </div>
 
+            <label>
+            タイトル:
             <input
                 type="text"
-                placeholder="コンテンツ"
+                defaultValue={content.title}
+                className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                onChange={({ target }) => setTitle(target.value)}
+                />
+            </label>
+            <label>
+            コンテンツ:
+            <input
+                type="text"
+                defaultValue={content.content}
                 className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
                 onChange={({ target }) => setContent(target.value)}
                 />
-
+            </label>
             <div>
-                <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}    
-                disabled={isInvalid} 
-                onClick = {handlePostImage}> 保存
+                <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'} `} 
+                disabled={isInvalid}
+                onClick = {handleUpdate}> 保存
                 </button>
                 <a className={`pt-1`}> </a>
 
@@ -92,4 +103,4 @@ export default function NewPost({userId, handleClose}) {
         </div>
     </>
     );
-  }
+}
