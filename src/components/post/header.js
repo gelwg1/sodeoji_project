@@ -4,19 +4,37 @@ import UserContext from '../../context/user';
 import useUser from '../../hooks/use-user';
 import { useContext, useState } from 'react';
 import FirebaseContext from '../../context/firebase';
+import EditPostInfor from './edit-post';
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import { withStyles } from '@material-ui/core/styles';
+
+const DialogActions = withStyles((theme) => ({
+  root: {
+      margin: 0,
+      padding: theme.spacing(1),
+  },
+}))(MuiDialogActions);
 
 export default function Header({ username, avatarSrc, date, content }) {
-  var today = new Date(date);
-  
   const { user: loggedInUser } = useContext(UserContext);
   const { user } = useUser(loggedInUser?.uid);
   const { database } = useContext(FirebaseContext);
-  
+
   const handleDelete =  async () => {
     await database.ref('Posts').child(content.key).remove();
+    window.location.reload();
+  };
+  
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+      setOpen(true);
+  };
+  const handleClose = () => {
+      setOpen(false);
   };
 
-  date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
   return (
     <div className="flex border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex justify-center items-center" style={{width: "100%"}}>
@@ -33,7 +51,14 @@ export default function Header({ username, avatarSrc, date, content }) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href="#/action-1">投稿の編集</Dropdown.Item>
+              <Dropdown.Item href={`#/post-detail/${content.key}/edit`}>
+                <li onClick={handleClickOpen}> 投稿の編集 </li>
+                <Dialog open={open}>
+                  <DialogActions>
+                    <EditPostInfor content={content} handleClose={handleClose} />
+                  </DialogActions>
+                </Dialog>
+              </Dropdown.Item>
               
               <Dropdown.Item onClick={handleDelete}>投稿の削除</Dropdown.Item>
             </Dropdown.Menu>
