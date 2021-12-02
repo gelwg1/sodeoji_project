@@ -35,6 +35,7 @@ export default function Header({ username, avatarSrc, date, content }) {
       setOpen(false);
   };
 
+  date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date);
   return (
     <div className="flex border-b border-gray-primary h-4 p-4 py-8">
       <div className="flex justify-center items-center" style={{width: "100%"}}>
@@ -43,7 +44,7 @@ export default function Header({ username, avatarSrc, date, content }) {
           src={avatarSrc}
           alt={`Avatar`}
         />
-        <p className="font-bold">{date} by {username}</p>
+        <p className="font-bold mr-3">{date} by {username}</p>
         <div clsaaName="flex-end" style={{marginLeft: "auto", order: "2"}}>
         { user?.username == username &&
           <Dropdown>

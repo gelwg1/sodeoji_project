@@ -13,18 +13,20 @@ export default function PostDetail({ post, handleClose }) {
   const handleFocus = () => commentInput.current.focus();
 
   return (
-    <div className="rounded col-span-8 border bg-white border-gray-primary mb-12">
-      <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} content={post}/>
-      <button className={` bg-blue-medium text-white w-45 rounded h-8 font-bold`}     
-        onClick={handleClose}
-        > 戻る
-      </button>
+    <div className="rounded row border bg-white border-gray-primary mb-12">
+      <div className="flex justify-center items-center">
+        <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} content={post}/>
+        <button className = {`bg-primary text-white w-25 rounded h-8 font-bold my-2`}     
+          onClick={handleClose}
+          > 戻る
+        </button>
+      </div>
       <Image src={post?.image_url}/>
       <div className="p-4 pt-2 pb-1">
-      <a className="font-bold text-black-light">
-         {post?.title}
-      </a>
-      <p className="italic">{post?.content}</p>
+        <a className="font-bold text-black-light">
+          {post?.title}
+        </a>
+        <p className="italic">{post?.content}</p>
       </div>
       <Footer votes={post?.vote_numbers} comments={post?.comment_numbers}/>
       <Actions
