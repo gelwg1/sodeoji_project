@@ -4,13 +4,13 @@ import {Fab, Grid} from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 
 export default function EditPostInfor({content, handleClose}) {
-    const [newTitle, setTitle] = useState('');
-    const [newContent, setContent] = useState('');
+    const [newTitle, setTitle] = useState(content.title);
+    const [newContent, setContent] = useState(content.content);
     const [newImgPost, setImgPost] = useState('');
     const [newImageSrc, setImageSrc] = useState('');
     const { database, storage } = useContext(FirebaseContext);
 
-    const isInvalid = newContent === '' || newTitle === '';
+    const isInvalid = newContent === '' && newTitle === '';
    
     const handleUpdate = async (event) => {
         event.preventDefault();

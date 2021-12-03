@@ -3,6 +3,7 @@ import { Link, useHistory } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
 import useGroups from '../hooks/use-groups';
+import * as DEFAULT_IMAGE_PATH from '../constants/paths';
 
 export default function SignUp() {
   const history = useHistory();
@@ -38,7 +39,7 @@ export default function SignUp() {
           .ref('/Users')
           .push({
             user_id: createdUserResult.user.uid,
-            avatar: '',
+            avatar: '/images/avatars/default.png',
             group: group,
             username: username,
           });
