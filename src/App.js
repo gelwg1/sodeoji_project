@@ -14,8 +14,6 @@ const Profile = lazy(() => import('./pages/profile'));
 const EditProfile = lazy(() => import('./pages/edit-profile'));
 const NotFound = lazy(() => import('./pages/not-found'));
 const Post = lazy(() => import('./pages/post'));
-const EditPostInfor = lazy(() => import('./components/post/edit-post'));
-const PostDetail = lazy(() => import('./components/post/post-detail'));
 
 export default function App() {
   const { user } = useAuthListener();
@@ -38,8 +36,6 @@ export default function App() {
             <Route path={ROUTES.SIGN_UP} component={SignUp} />
             <Route path={ROUTES.PROFILE} component={Profile} />
             <Route path={ROUTES.POST_LIST} component={Post} />
-            <Route path={ROUTES.POST_DETAILS} component={PostDetail} />
-            <Route path={ROUTES.POST_EDIT} component={EditPostInfor} />
             <Route path={ROUTES.EDIT_PROFILE} component={EditProfile} />
             <ProtectedRoute user={user} path={`${ROUTES.DASHBOARD}/:type?/:param2?`} exact>
               <Dashboard />

@@ -7,52 +7,46 @@ import Footer from './footer'
 import Actions from './actions';
 import Comments from './comments';
 
-
-export default function PostDetail({ post, handleClose }) {
+export default function PostDetail({ content }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
 
   return (
     <div className="rounded row border bg-white border-gray-primary mb-12">
-      <div className="flex justify-center items-center">
-        <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} content={post}/>
-        <button className = {`bg-primary text-white w-25 rounded h-8 font-bold my-2`}     
-          onClick={handleClose}
-          > 戻る
-        </button>
-      </div>
-      <Image src={post?.image_url}/>
+      <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date} content={content}/>
+      <Image src={content?.image_url}/>
+      <Body date={content?.create_date} title={content?.title} content={content?.content}/>
       <div className="p-4 pt-2 pb-1">
         <a className="font-bold text-black-light">
-          {post?.title}
+          {content?.title}
         </a>
-        <p className="italic">{post?.content}</p>
+        <p className="italic">{content?.content}</p>
       </div>
-      <Footer votes={post?.vote_numbers} comments={post?.comment_numbers}/>
-      <Actions
-        postId={post?.key}
+      <Footer votes={content?.vote_numbers} comments={content?.comment_numbers}/>
+      {/* <Actions
+        postId={content?.key}
         handleFocus={handleFocus}
-      />
-
-      {/* <Comments
-        postId={post?.key}
-        comments={post?.comments}
-        posted={post?.dateCreated}
-        commentInput={commentInput}
       /> */}
+
+      <Comments
+        postId={content?.key}
+        comments={content?.comments}
+        postTime={content?.create_date}
+        commentInput={commentInput}
+      />
 
     </div>
   );
 }
 
 PostDetail.propTypes = {
-  post: PropTypes.shape({
+  content: PropTypes.shape({
     key: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     author_avatar: PropTypes.string.isRequired,
     image_url: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    post: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
     create_date: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     comment_numbers: PropTypes.number.isRequired,

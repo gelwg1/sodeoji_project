@@ -1,28 +1,44 @@
 import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import FirebaseContext from '../../context/firebase';
-import UserContext from '../../context/user';
+import * as DEFAULT_IMAGE_PATH from '../../constants/paths';
 
-export default function AddComment({ docId, comments, setComments, commentInput }) {
+
+export default function AddComment({ postId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('');
-  const { firebase, FieldValue } = useContext(FirebaseContext);
-  const {
-    user: { displayName }
-  } = useContext(UserContext);
+  const { database, firebase, FieldValue } = useContext(FirebaseContext);
+  const user = firebase.auth().currentUser;
+  let username = user?.username;
+  let avatar = user?.avatar;
+  if  (username == undefined){
+    username = "Undefine User";
+  }
+  if (avatar == undefined){
+    avatar = DEFAULT_IMAGE_PATH ;
+  }
+
+  let postRef = '/Posts/' + postId + '/comments';
 
   const handleSubmitComment = (event) => {
-    event.preventDefault();
-
-    setComments([...comments, { displayName, comment }]);
-    setComment('');
-
-    return firebase
-      .firestore()
-      .collection('photos')
-      .doc(docId)
-      .update({
-        comments: FieldValue.arrayUnion({ displayName, comment })
-      });
+    if (comments!=null){
+      setComments([...comments, { username, avatar, comment }]);
+      setComment('');
+      return database
+        .ref('Post')
+        .child(postId)
+        .update({
+          comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
+        });
+    }
+    else {
+      setComments([comments, { username, avatar, comment }]);
+      setComment('');
+      return database
+        .ref(postRef)
+        .push({
+          comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
+        });
+    }
   };
 
   return (
@@ -59,7 +75,7 @@ export default function AddComment({ docId, comments, setComments, commentInput 
 }
 
 AddComment.propTypes = {
-  docId: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
   setComments: PropTypes.func.isRequired,
   commentInput: PropTypes.object

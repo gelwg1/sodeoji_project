@@ -11,7 +11,7 @@ export default function Post({ content }) {
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12">
       <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date} content={content}/>
       <Image src={content?.image_url}/>
-      <Body postId={content.key} title={content?.title} content={content?.content} post={content}/>
+      <Body date={content?.create_date} title={content?.title} content={content?.content}/>
       <Footer votes={content?.vote_numbers} comments={content?.comment_numbers}/>
     </div>
   );

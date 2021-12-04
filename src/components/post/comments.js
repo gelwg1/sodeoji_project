@@ -4,26 +4,27 @@ import { formatDistance } from 'date-fns';
 import { Link } from 'react-router-dom';
 import AddComment from './add-comment';
 
-export default function Comments({ docId, comments: allComments, posted, commentInput }) {
+export default function Comments({ postId, comments: allComments, postTime, commentInput }) {
   const [comments, setComments] = useState(allComments);
-  const [commentsSlice, setCommentsSlice] = useState(3);
+  const [commentsSlice, setCommentsSlice] = useState('');
 
   const showNextComments = () => {
     setCommentsSlice(commentsSlice + 3);
   };
 
+  postTime = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(postTime);
   return (
     <>
       <div className="p-4 pt-1 pb-4">
-        {comments.slice(0, commentsSlice).map((item) => (
-          <p key={`${item.comment}-${item.displayName}`} className="mb-1">
-            <Link to={`/p/${item.displayName}`}>
-              <span className="mr-1 font-bold">{item.displayName}</span>
+        {comments?.slice(0, commentsSlice).map((item) => (
+          <p key={`${item?.comment}-${item?.username}`} className="mb-1">
+            <Link to={`/p/${item?.username}`}>
+              <span className="mr-1 font-bold">{item?.username}</span>
             </Link>
-            <span>{item.comment}</span>
+            <span>{item?.comment}</span>
           </p>
         ))}
-        {comments.length >= 3 && commentsSlice < comments.length && (
+        {comments?.length >= 3 && commentsSlice < comments?.length && (
           <button
             className="text-sm text-gray-base mb-1 cursor-pointer focus:outline-none"
             type="button"
@@ -38,11 +39,11 @@ export default function Comments({ docId, comments: allComments, posted, comment
           </button>
         )}
         <p className="text-gray-base uppercase text-xs mt-2">
-          {formatDistance(posted, new Date())} 前
+          {postTime} 前
         </p>
       </div>
       <AddComment
-        docId={docId}
+        postId={postId}
         comments={comments}
         setComments={setComments}
         commentInput={commentInput}
@@ -52,8 +53,8 @@ export default function Comments({ docId, comments: allComments, posted, comment
 }
 
 Comments.propTypes = {
-  docId: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
-  posted: PropTypes.number.isRequired,
+  postTime: PropTypes.number.isRequired,
   commentInput: PropTypes.object.isRequired
 };

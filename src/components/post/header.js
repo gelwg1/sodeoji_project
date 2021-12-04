@@ -35,6 +35,7 @@ export default function Header({ username, avatarSrc, date, content }) {
       setOpen(false);
   };
 
+  let id = date;
   date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date);
   return (
     <div className="flex border-b border-gray-primary h-4 p-4 py-8">
@@ -52,7 +53,7 @@ export default function Header({ username, avatarSrc, date, content }) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href={`#/post-detail/${content.key}/edit`}>
+              <Dropdown.Item>
                 <li onClick={handleClickOpen}> 投稿の編集 </li>
                 <Dialog open={open}>
                   <DialogActions>
