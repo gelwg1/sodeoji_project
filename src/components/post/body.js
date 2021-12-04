@@ -3,13 +3,13 @@ import { useContext, useState } from 'react';
 import PostDetail from './post-detail';
 import { Link } from 'react-router-dom';
 
-export default function Body({ date, title, content }) {
+export default function Body({ date, title, content, post }) {
 
   return (
     <div className="p-4 pt-2 pb-1">
       <a className="font-bold text-black-light">
         <Link to={`/dashboard/post-details/${date}`}>
-          <PostDetail content={content}></PostDetail>
+          <PostDetail content={post}></PostDetail>
         </Link>
          {title}
       </a>
