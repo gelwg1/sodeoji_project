@@ -19,7 +19,7 @@ export default function NewPost({user, handleClose}) {
         .ref('Posts')
         .push({
           author: user?.username,
-          author_avatar: DEFAULT_IMAGE_PATH,
+          author_avatar: user?.avatar,
           comment_numbers: 0,
           content: content,
           create_date: Date.now(),

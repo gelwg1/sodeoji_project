@@ -17,10 +17,11 @@ const firebaseConfig = {
 const firebase = Firebase.initializeApp(firebaseConfig);
 const database = Firebase.database();
 const storage = Firebase.storage();
+const auth = Firebase.auth();
 
 // Create Seed data
 // seedDatabase(firebase);
-export { firebase, database, storage };
+export { firebase, database, storage, auth };
 
 export const uiConfig = {
     signInFlow: 'popup',

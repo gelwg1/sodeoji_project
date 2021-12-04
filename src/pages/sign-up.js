@@ -3,9 +3,12 @@ import { Link, useHistory } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
 import useGroups from '../hooks/use-groups';
+import * as DEFAULT_IMAGE_PATH from '../constants/paths';
+import useAuthListener from '../hooks/use-auth-listener';
 
 export default function SignUp() {
   const history = useHistory();
+  const user = useAuthListener();
   const { firebase, database } = useContext(FirebaseContext);
 
   const [username, setUsername] = useState('');
@@ -38,7 +41,7 @@ export default function SignUp() {
           .ref('/Users')
           .push({
             user_id: createdUserResult.user.uid,
-            avatar: '',
+            avatar: '/images/avatars/default.png',
             group: group,
             username: username,
           });
@@ -70,8 +73,10 @@ export default function SignUp() {
   }
 
   useEffect(() => {
-    console.log(groups);
     if (groups) setLoading(false);
+    if (user) {
+      history.push(ROUTES.DASHBOARD);
+    }
     document.title = 'サインアップ';
   }, [groups]);
 

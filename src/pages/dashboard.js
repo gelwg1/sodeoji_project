@@ -10,7 +10,6 @@ import { useParams } from "react-router-dom";
 export default function Dashboard({ user: loggedInUser }) {
   const { user, setActiveUser } = useUser(loggedInUser.uid);
   var { type, param2 } = useParams();
-  console.log(type, param2);
 
   useEffect(() => {
     document.title = 'ホーム';
