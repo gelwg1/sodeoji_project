@@ -1,6 +1,6 @@
 import { firebase, database, storage } from '../lib/firebase';
 
-function snapshotToArray(snapshot) {
+export function snapshotToArray(snapshot) {
   var returnArr = [];
 
   snapshot.forEach(function (childSnapshot) {
