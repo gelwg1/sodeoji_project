@@ -35,7 +35,7 @@ export default function App() {
             <Route path={ROUTES.LOGIN} component={Login} />
             <Route path={ROUTES.SIGN_UP} component={SignUp} />
             <Route path={ROUTES.PROFILE} component={Profile} />
-            <Route path={ROUTES.POST_LIST} component={Post} />
+            <Route path={ROUTES.POST_DETAILS} component={Post} />
             <Route path={ROUTES.EDIT_PROFILE} component={EditProfile} />
             <ProtectedRoute user={user} path={`${ROUTES.DASHBOARD}/:type?/:param2?`} exact>
               <Dashboard />

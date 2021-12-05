@@ -15,20 +15,29 @@ export default function NewPost({user, handleClose}) {
 
     const handlePost = async (event) => {
         event.preventDefault();
-        await database
-        .ref('Posts')
-        .push({
-          author: user?.username,
-          author_avatar: user?.avatar,
-          comment_numbers: 0,
-          content: content,
-          create_date: Date.now(),
-          group: user?.group,
-          image_url: imageSrc,
-          title: title,
-          vote_numbers: 0
 
-    });
+        var postId = database
+            .ref('Posts')
+            .push({
+                postId: user?.username,
+                author: user?.username,
+                author_avatar: user?.avatar,
+                comment_numbers: 0,
+                content: content,
+                create_date: Date.now(),
+                group: user?.group,
+                image_url: imageSrc,
+                title: title,
+                vote_numbers: 0,
+                comments: ['']
+                })
+            .key;
+        var postRef = 'Posts/' + postId; 
+        database
+            .ref(postRef)
+            .update({
+                postId: postId
+            });
         window.location.reload();
     };
 

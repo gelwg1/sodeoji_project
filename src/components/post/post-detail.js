@@ -7,25 +7,25 @@ import Footer from './footer'
 import Actions from './actions';
 import Comments from './comments';
 
-export default function PostDetail({ content }) {
+export default function PostDetail({ post }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
 
   return (
     <div className="rounded row border bg-white border-gray-primary mb-12">
-      <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date} content={content}/>
-      <Image src={content?.image_url}/>
-      <Body date={content?.create_date} title={content?.title} content={content?.content} post={content}/>
-      <Footer votes={content?.vote_numbers} comments={content?.comment_numbers}/>
+      <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} post={post}/>
+      <Image src={post?.image_url}/>
+      <Body postId={post?.postId} title={post?.title} content={post?.content}/>
+      <Footer votes={post?.vote_numbers} comments={post?.comment_numbers}/>
       {/* <Actions
-        postId={content?.key}
+        postId={post?.postId}
         handleFocus={handleFocus}
       /> */}
 
       <Comments
-        postId={content?.key}
-        comments={content?.comments}
-        postTime={content?.create_date}
+        postId={post?.postId}
+        comments={post?.comments}
+        postTime={post?.create_date}
         commentInput={commentInput}
       />
 
@@ -34,8 +34,8 @@ export default function PostDetail({ content }) {
 }
 
 PostDetail.propTypes = {
-  content: PropTypes.shape({
-    key: PropTypes.string.isRequired,
+  post: PropTypes.shape({
+    postId: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     author_avatar: PropTypes.string.isRequired,
     image_url: PropTypes.string.isRequired,

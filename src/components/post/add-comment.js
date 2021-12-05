@@ -17,28 +17,15 @@ export default function AddComment({ postId, comments, setComments, commentInput
     avatar = DEFAULT_IMAGE_PATH ;
   }
 
-  let postRef = '/Posts/' + postId + '/comments';
-
   const handleSubmitComment = (event) => {
-    if (comments!=null){
-      setComments([...comments, { username, avatar, comment }]);
-      setComment('');
-      return database
-        .ref('Post')
-        .child(postId)
-        .update({
-          comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
-        });
-    }
-    else {
-      setComments([comments, { username, avatar, comment }]);
-      setComment('');
-      return database
-        .ref(postRef)
-        .push({
-          comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
-        });
-    }
+  setComments([...comments, { username, avatar, comment }]);
+  setComment('');
+  return database
+    .ref('Posts')
+    .child(postId)
+    .update({
+      comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
+    });
   };
 
   return (

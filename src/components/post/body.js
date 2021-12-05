@@ -1,17 +1,12 @@
 import PropTypes from 'prop-types';
 import { useContext, useState } from 'react';
-import PostDetail from './post-detail';
-import { Link } from 'react-router-dom';
 
-export default function Body({ date, title, content, post }) {
+export default function Body({ postId, title, content}) {
 
   return (
     <div className="p-4 pt-2 pb-1">
-      <a className="font-bold text-black-light">
-        <Link to={`/dashboard/post-details/${date}`}>
-          <PostDetail content={post}></PostDetail>
-        </Link>
-         {title}
+      <a className="font-bold text-black-light" href={`/dashboard/post-details/${postId}`} >
+        {title}
       </a>
       <p className="italic">{content}</p>
     </div>
@@ -20,5 +15,5 @@ export default function Body({ date, title, content, post }) {
 
 Body.propTypes = {
   title: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired
+  content: PropTypes.string.isRequired,
 };
