@@ -4,10 +4,9 @@ import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import FirebaseContext from '../../context/firebase';
-import { useState, React, useContext } from 'react';
+import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
-import {snapshotToArray} from '../../services/firebase';
 import useCheckVotes from '../../hooks/use-check-votes';
 
 export default function Footer({ votes, comments, content }) {
@@ -15,6 +14,28 @@ export default function Footer({ votes, comments, content }) {
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
     const { isVoted, id } = useCheckVotes(user?.user_id, content?.key);
+
+    var saved;
+    const [save, setSave] = useState(false);
+    
+    const handleSave = async () => {
+        if (saved == null) await database.ref('Saves').child(`${user?.username}/${content?.key}`).set(1);
+        else await database.ref('Saves').child(`${user?.username}/${content?.key}`).remove();
+    }
+
+    useEffect(() => {
+        async function getSaved() {
+            await database
+                .ref(`Saves/${user?.username}/${content?.key}`)
+                .on('value', (snapshot) => {
+                    saved = snapshot.val();
+                    if (saved) setSave(true);
+                    else setSave(false);
+                });
+        }
+
+        getSaved();
+    }, saved);
 
     const upvote = async (event) => {
         event.preventDefault();
@@ -66,11 +87,11 @@ export default function Footer({ votes, comments, content }) {
                     <div>{votes}</div>
                 </div>
                 <div className="font-bold flex flex-row justify-center items-center">
-                    <ChatBubbleOutlineIcon className="mr-1"/>
+                    <ChatBubbleOutlineIcon className="mr-1" />
                     <div>{comments}</div>
                 </div>
                 <div className="font-bold flex justify-center items-center">
-                    <GetAppIcon/>
+                    <GetAppIcon onClick={handleSave} className="cursor-pointer rounded-full" fontSize="large" style={save ? { backgroundColor: 'green', fill: 'white' } : {}} />
                 </div>
             </div>
         </div>

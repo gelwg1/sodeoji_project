@@ -7,7 +7,7 @@ import useAuthListener from '../hooks/use-auth-listener';
 export default function Login() {
   const history = useHistory();
   const user = useAuthListener();
-  const { firebase, database } = useContext(FirebaseContext);
+  const { firebase } = useContext(FirebaseContext);
   
 
   const [username, serUsername] = useState('');
