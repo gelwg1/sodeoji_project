@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { useContext, useState } from 'react';
 
 export default function Body({ postId, title, content}) {
 

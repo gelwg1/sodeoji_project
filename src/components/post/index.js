@@ -6,12 +6,11 @@ import Body from './body';
 import Footer from './footer';
 
 export default function Post({ content }) {
-
-  return (
+   return (
     <div className="rounded col-span-4 border bg-white border-gray-primary mb-12">
       <Header username={content?.author} avatarSrc={content?.author_avatar} date={content?.create_date} content={content}/>
       <Image src={content?.image_url}/>
-      <Body postId={content.postId} title={content?.title} content={content?.content}/>
+      <Body postId={content?.postId} title={content?.title} content={content?.content}/>
       <Footer votes={content?.vote_numbers} comments={content?.comment_numbers} content={content}/>
     </div>
   );

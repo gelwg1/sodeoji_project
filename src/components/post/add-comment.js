@@ -18,14 +18,15 @@ export default function AddComment({ postId, comments, setComments, commentInput
   }
 
   const handleSubmitComment = (event) => {
-  setComments([...comments, { username, avatar, comment }]);
-  setComment('');
-  return database
-    .ref('Posts')
-    .child(postId)
-    .update({
-      comments: firebase.firestore.FieldValue.arrayUnion({ username, avatar, comment })
-    });
+    setComments([...comments, { username, avatar, comment }]);
+    setComment('');
+    return database
+      .firestore()
+      .collection('Posts')
+      .doc(postId)
+      .update({
+        comments: FieldValue.arrayUnion({ username, avatar, comment })
+      });
   };
 
   return (

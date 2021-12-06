@@ -35,7 +35,6 @@ export default function Header({ username, avatarSrc, date, content }) {
       setOpen(false);
   };
 
-  let id = date;
   date = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(date);
   return (
     <div className="flex border-b border-gray-primary h-4 p-4 py-8">
