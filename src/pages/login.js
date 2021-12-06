@@ -2,11 +2,11 @@ import { useState, useContext, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import FirebaseContext from '../context/firebase';
 import * as ROUTES from '../constants/routes';
-import useAuthListener from '../hooks/use-auth-listener';
+// import useAuthListener from '../hooks/use-auth-listener';
 
 export default function Login() {
   const history = useHistory();
-  const user = useAuthListener();
+  // const user = useAuthListener();
   const { firebase } = useContext(FirebaseContext);
   
 
@@ -30,9 +30,9 @@ export default function Login() {
   };
 
   useEffect(() => {
-    if (user){
-      history.push(ROUTES.DASHBOARD);
-    }
+    // if (user){
+    //   history.push(ROUTES.DASHBOARD);
+    // }
     document.title = 'ログイン';
   }, []);
 
