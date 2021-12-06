@@ -138,20 +138,31 @@ export async function getPosts(type, param2, user) {
   var result = snapshotToArray(snapshot);
   switch (type) {
     case "post-details":
-      result = await Promise.all (result.filter((item) => {
+      result = await Promise.all(result.filter((item) => {
         return item.key == param2;
       }));
       break;
     case "post":
+      result = await Promise.all(result.filter((item) => {
+        return (user?.username == item.author)
+      }));
+      break;
     case "save":
+      const saved_snapshot = await database
+        .ref(`Saves/${user?.username}`)
+        .once('value');
+        const saved = saved_snapshot.val();
+      result = await Promise.all(result.filter((item) => {
+        return (saved != null && saved[`${item.key}`]);
+      }));
+      break;
     default:
-      result = await Promise.all (result.filter((item) => {
+      result = await Promise.all(result.filter((item) => {
         return (user?.group == item.group)
       }));
       break;
   }
 
-  // console.log(result);
   return result;
 }
 
