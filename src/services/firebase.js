@@ -166,6 +166,16 @@ export async function getPosts(type, param2, user) {
   return result;
 }
 
+export async function getPostByPostId(postId) {
+  let result;
+  await database.ref(`Posts`).orderByChild("postId").equalTo(postId).once("value", snapshot => {
+    if (snapshot.exists()) {
+      result = snapshotToArray(snapshot)[0];
+    }
+  });
+  return result;
+}
+
 export async function updateUserProfile(
   docId,
   newFullName

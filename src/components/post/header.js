@@ -52,7 +52,7 @@ export default function Header({ username, avatarSrc, date, content }) {
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item href={`#/post-detail/${content.key}/edit`}>
+              <Dropdown.Item>
                 <li onClick={handleClickOpen}> 投稿の編集 </li>
                 <Dialog open={open}>
                   <DialogActions>

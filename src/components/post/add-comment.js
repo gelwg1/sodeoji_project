@@ -1,27 +1,31 @@
 import { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import FirebaseContext from '../../context/firebase';
-import UserContext from '../../context/user';
+import * as DEFAULT_IMAGE_PATH from '../../constants/paths';
 
-export default function AddComment({ docId, comments, setComments, commentInput }) {
+
+export default function AddComment({ postId, comments, setComments, commentInput }) {
   const [comment, setComment] = useState('');
-  const { firebase, FieldValue } = useContext(FirebaseContext);
-  const {
-    user: { displayName }
-  } = useContext(UserContext);
+  const { database, firebase, FieldValue } = useContext(FirebaseContext);
+  const user = firebase.auth().currentUser;
+  let username = user?.username;
+  let avatar = user?.avatar;
+  if  (username == undefined){
+    username = "Undefine User";
+  }
+  if (avatar == undefined){
+    avatar = DEFAULT_IMAGE_PATH ;
+  }
 
   const handleSubmitComment = (event) => {
-    event.preventDefault();
-
-    setComments([...comments, { displayName, comment }]);
+    setComments([...comments, { username, avatar, comment }]);
     setComment('');
-
-    return firebase
+    return database
       .firestore()
-      .collection('photos')
-      .doc(docId)
+      .collection('Posts')
+      .doc(postId)
       .update({
-        comments: FieldValue.arrayUnion({ displayName, comment })
+        comments: FieldValue.arrayUnion({ username, avatar, comment })
       });
   };
 
@@ -59,7 +63,7 @@ export default function AddComment({ docId, comments, setComments, commentInput 
 }
 
 AddComment.propTypes = {
-  docId: PropTypes.string.isRequired,
+  postId: PropTypes.string.isRequired,
   comments: PropTypes.array.isRequired,
   setComments: PropTypes.func.isRequired,
   commentInput: PropTypes.object

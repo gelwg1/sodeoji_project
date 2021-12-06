@@ -7,39 +7,27 @@ import Footer from './footer'
 import Actions from './actions';
 import Comments from './comments';
 
-
-export default function PostDetail({ post, handleClose }) {
+export default function PostDetail({ post }) {
   const commentInput = useRef(null);
   const handleFocus = () => commentInput.current.focus();
 
   return (
     <div className="rounded row border bg-white border-gray-primary mb-12">
-      <div className="flex justify-center items-center">
-        <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} content={post}/>
-        <button className = {`bg-primary text-white w-25 rounded h-8 font-bold my-2`}     
-          onClick={handleClose}
-          > 戻る
-        </button>
-      </div>
+      <Header username={post?.author} avatarSrc={post?.author_avatar} date={post?.create_date} post={post}/>
       <Image src={post?.image_url}/>
-      <div className="p-4 pt-2 pb-1">
-        <a className="font-bold text-black-light">
-          {post?.title}
-        </a>
-        <p className="italic">{post?.content}</p>
-      </div>
+      <Body postId={post?.postId} title={post?.title} content={post?.content}/>
       <Footer votes={post?.vote_numbers} comments={post?.comment_numbers}/>
-      <Actions
-        postId={post?.key}
+      {/* <Actions
+        postId={post?.postId}
         handleFocus={handleFocus}
-      />
-
-      {/* <Comments
-        postId={post?.key}
-        comments={post?.comments}
-        posted={post?.dateCreated}
-        commentInput={commentInput}
       /> */}
+
+      <Comments
+        postId={post?.postId}
+        comments={post?.comments}
+        postTime={post?.create_date}
+        commentInput={commentInput}
+      />
 
     </div>
   );
@@ -47,12 +35,12 @@ export default function PostDetail({ post, handleClose }) {
 
 PostDetail.propTypes = {
   post: PropTypes.shape({
-    key: PropTypes.string.isRequired,
+    postId: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     author_avatar: PropTypes.string.isRequired,
     image_url: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    post: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
     create_date: PropTypes.number.isRequired,
     comments: PropTypes.array.isRequired,
     comment_numbers: PropTypes.number.isRequired,
