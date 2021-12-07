@@ -100,7 +100,7 @@ export default function NewPost({user, handleClose}) {
             <div>
                 <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}    
                 disabled={isInvalid} 
-                onClick = {handlePost}> 保存
+                onClick = {handlePost}> 作成
                 </button>
                 <a className={`pt-1`}> </a>
 
