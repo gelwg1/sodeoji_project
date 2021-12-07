@@ -17,7 +17,13 @@ export default function Comments({ postId, user}) {
   //      rootComments = snapshotToArray(snapshot);
   //   };
   // });
-  var rootComments = database.ref(Comments).on('value', (snapshot) => { return snapshotToArray(snapshot); });
+  var rootComments = database.ref(`Posts/${postId}`).once('value', snapshot => { 
+      
+        if (snapshot.exists()){
+          console.log(snapshot.val().comments);
+        }
+    });
+
 
   const getReplies = commentId => {
     return backendComments
@@ -91,12 +97,11 @@ export default function Comments({ postId, user}) {
   // }, [rootComments]);
 
 
-  console.log(rootComments);
   return (
       <div className="comments p-4 pt-1 pb-4">
         <h3 className="comments-title">Comments</h3>
         <div className="comments-container">
-          {rootComments?.map((rootComment) => (
+          {/* {rootComments?.map((rootComment) => (
             <Comment 
               key={rootComment?.id} 
               comment={rootComment} 
@@ -107,7 +112,7 @@ export default function Comments({ postId, user}) {
               setActiveComment={setActiveComment}
               addComment={addComment}
             />
-          ))}
+          ))} */}
         </div>
         <div className="comment-form-title">Write Comment</div>
         <CommentForm submitLabel="Write" handleSubmit={addComment} />

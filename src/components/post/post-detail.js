@@ -22,9 +22,9 @@ export default function PostDetail({ post }) {
         handleFocus={handleFocus}
       /> */}
 
-      <Comments
+      {/* <Comments
         postId={post?.postId}
-      />
+      /> */}
 
     </div>
   );
