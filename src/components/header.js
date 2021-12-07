@@ -39,7 +39,7 @@ export default function Header() {
                         <NavDropdown.Item title="Sign Out"
                           onClick={() => {
                             firebase.auth().signOut();
-                            history.push(ROUTES.LOGIN);
+                            history.push(ROUTES.DASHBOARD);
                           }}>
                           サインアウト
                         </NavDropdown.Item>
