@@ -4,7 +4,7 @@ import FirebaseContext from '../../context/firebase';
 import * as DEFAULT_IMAGE_PATH from '../../constants/paths';
 
 
-export default function AddComment({ postId, comments, setComments, commentInput }) {
+export default function AddComment({ postId, commentInput }) {
   const [comment, setComment] = useState('');
   const { database, firebase, FieldValue } = useContext(FirebaseContext);
   const user = firebase.auth().currentUser;
@@ -18,15 +18,17 @@ export default function AddComment({ postId, comments, setComments, commentInput
   }
 
   const handleSubmitComment = (event) => {
-    setComments([...comments, { username, avatar, comment }]);
+    event.preventDefault();
+
+    database
+      .ref(`Posts/${postId}/comments`)
+      .push({
+      comment: commentInput,
+      username: user?.username,
+      avatar: user?.avatar,
+      comments: ''
+    }); 
     setComment('');
-    return database
-      .firestore()
-      .collection('Posts')
-      .doc(postId)
-      .update({
-        comments: FieldValue.arrayUnion({ username, avatar, comment })
-      });
   };
 
   return (

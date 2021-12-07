@@ -24,9 +24,6 @@ export default function PostDetail({ post }) {
 
       <Comments
         postId={post?.postId}
-        comments={post?.comments}
-        postTime={post?.create_date}
-        commentInput={commentInput}
       />
 
     </div>

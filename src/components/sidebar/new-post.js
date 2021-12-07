@@ -28,7 +28,7 @@ export default function NewPost({user, handleClose}) {
                 image_url: imageSrc,
                 title: title,
                 vote_numbers: 0,
-                comments: ['']
+                comments: ''
                 })
             .key;
         var postRef = 'Posts/' + postId; 

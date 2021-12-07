@@ -1,60 +1,120 @@
-import { useState } from 'react';
+import { useEffect, useState, React, useContext } from 'react';
 import PropTypes from 'prop-types';
-import { formatDistance } from 'date-fns';
-import { Link } from 'react-router-dom';
-import AddComment from './add-comment';
+import Comment from './comment';
+import CommentForm from './comment-form';
+import { getCommentsByPostId, snapshotToArray, deleteCommentApi, getCommentByCommentId } from '../../services/firebase';
+import FirebaseContext from '../../context/firebase';
 
-export default function Comments({ postId, comments: allComments, postTime, commentInput }) {
-  const [comments, setComments] = useState(allComments);
-  const [commentsSlice, setCommentsSlice] = useState('');
+export default function Comments({ postId, user}) {
+  const [backendComments, setBackendComments] = useState([]);
+  const [activeComment, setActiveComment] = useState(null);
+  const { database, storage } = useContext(FirebaseContext);
+ 
+  // var rootComments = [];
+  // var listComments = database.ref(`Posts/${postId}/comments`).once('value', (snapshot) => {
+  //   if (snapshot.exists()){
+  //     // rootComments.push(snapshotToArray(snapshot));
+  //      rootComments = snapshotToArray(snapshot);
+  //   };
+  // });
+  var rootComments = database.ref(Comments).on('value', (snapshot) => { return snapshotToArray(snapshot); });
 
-  const showNextComments = () => {
-    setCommentsSlice(commentsSlice + 3);
+  const getReplies = commentId => {
+    return backendComments
+    .filter(backendComments => backendComments.parentId === commentId)
+    .sort(
+      (a,b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    );
+  };
+ 
+
+  const addComment = (text, parentId) => {
+    var userId = user?.user_id;
+    var username = user?.username;
+    if(parentId===undefined){
+      parentId='';
+    }
+  
+    var commentId = database
+      .ref(`Posts/${postId}/comments`)
+      .push({
+        id: postId,
+        postId: postId,
+        body: text,
+        parentId: parentId,
+        userId: userId,
+        username: username,
+        create_date: Date.now(),
+        vote_numbers: 0
+        })
+      .key;
+    var commentRef = `Posts/${postId}/comments/` + commentId; 
+    database
+      .ref(commentRef)
+      .update({
+        id: commentId
+    });
+    var comment = database.ref(`Posts/${postId}/comments`).child(commentId).once('value', (snapshot) => {
+      const commentValue = snapshot.val();
+      setBackendComments([commentValue, backendComments]);
+      setActiveComment(null);
+      console.log("comment", comment, "value", commentValue);
+    });
   };
 
-  postTime = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'}).format(postTime);
+  const deleteComment = (commentId) => {
+    if (window.confirm('Are you sure that you want to remove comment?')) {
+      deleteCommentApi(commentId).then(() => {
+        const updateBackendComments = backendComments.filter(
+          (backendComment) => backendComment.id !== commentId
+        );
+        setBackendComments(updateBackendComments);
+      })
+    }    
+  };
+  
+  // console.log(getCommentsByPostId(postId));
+  // useEffect(() => {
+  //   const rootComments = getCommentsByPostId(postId);
+    
+  //   console.log("list comment ", listComments);
+  //   if (listComments.length>0){
+  //     console.log("list comment ", listComments);
+  //     for(var i=0; i < listComments.length; i++){
+  //       listComments[i].then((data) => {
+  //         setBackendComments(data);
+  //         console.log("list comment i", listComments[i], "data", data);
+  //       });
+  //     }
+  //   }     
+  // }, [rootComments]);
+
+
+  console.log(rootComments);
   return (
-    <>
-      <div className="p-4 pt-1 pb-4">
-        {comments?.slice(0, commentsSlice).map((item) => (
-          <p key={`${item?.comment}-${item?.username}`} className="mb-1">
-            <Link to={`/p/${item?.username}`}>
-              <span className="mr-1 font-bold">{item?.username}</span>
-            </Link>
-            <span>{item?.comment}</span>
-          </p>
-        ))}
-        {comments?.length >= 3 && commentsSlice < comments?.length && (
-          <button
-            className="text-sm text-gray-base mb-1 cursor-pointer focus:outline-none"
-            type="button"
-            onClick={showNextComments}
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                showNextComments();
-              }
-            }}
-          >
-            他のコメントを見る
-          </button>
-        )}
-        <p className="text-gray-base uppercase text-xs mt-2">
-          {postTime} 前
-        </p>
+      <div className="comments p-4 pt-1 pb-4">
+        <h3 className="comments-title">Comments</h3>
+        <div className="comments-container">
+          {rootComments?.map((rootComment) => (
+            <Comment 
+              key={rootComment?.id} 
+              comment={rootComment} 
+              replies={getReplies(rootComment.id)}
+              user={user} 
+              deleteComment={deleteComment}
+              activeComment={activeComment}
+              setActiveComment={setActiveComment}
+              addComment={addComment}
+            />
+          ))}
+        </div>
+        <div className="comment-form-title">Write Comment</div>
+        <CommentForm submitLabel="Write" handleSubmit={addComment} />
       </div>
-      <AddComment
-        postId={postId}
-        comments={comments}
-        setComments={setComments}
-        commentInput={commentInput}
-      />
-    </>
   );
 }
 
 Comments.propTypes = {
-  postId: PropTypes.string.isRequired,
-  comments: PropTypes.array.isRequired,
-  postTime: PropTypes.number.isRequired,
-  commentInput: PropTypes.object.isRequired
+  postId: PropTypes.string.isRequired
 };

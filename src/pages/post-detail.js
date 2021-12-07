@@ -8,12 +8,15 @@ import Header from '../components/header';
 // import Actions from '../components/post/actions.js';
 import Comments from '../components/post/comments';
 import Sidebar from '../components/sidebar/index';
+import UserContext from '../context/user';
+import useUser from '../hooks/use-user';
 
 export default function PostDetail() {
     const { postId } = useParams();
-        
+    const { user: loggedInUser } = useContext(UserContext);
+    const { user } = useUser(loggedInUser?.uid);
     const [post, setPost] = useState(null);
-    const history = useHistory();
+    const history = useHistory();  
     
     useEffect(() => {
       async function checkPostExists() {
@@ -43,9 +46,7 @@ export default function PostDetail() {
                     /> */}
                     <Comments
                       postId={post?.postId}
-                      comments={post?.comments}
-                      postTime={post?.create_date}
-                      commentInput={commentInput}
+                      user={user}
                     />
                 </div>      
               </div> 

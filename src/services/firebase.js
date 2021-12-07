@@ -280,3 +280,107 @@ export async function updateAvatar(
     }
   );
 };
+
+// export async function createCommentApi(text, user, postId, parentId){
+//   var userId = user?.user_id;
+//   var username = user?.username;
+//   if(parentId===undefined){
+//     parentId='';
+//   }
+  
+//   if(userId==undefined){
+//     userId = 1;
+//   }
+
+//   if(username==undefined){
+//     username='Guest';
+//   }
+
+//   var commentId = database
+//   .ref('Comments')
+//   .push({
+//       id: 0,
+//       postId: postId,
+//       body: text,
+//       parentId: parentId,
+//       userId: userId,
+//       username: username,
+//       create_date: Date.now(),
+//       vote_numbers: 0
+//       })
+//   .key;
+//   var commentRef = 'Comments/' + commentId; 
+//   database
+//     .ref(commentRef)
+//     .update({
+//       id: commentId
+//   });
+//   return commentId;
+// }
+
+export async function createCommentApi(text, user, postId, parentId){
+    var userId = user?.user_id;
+    var username = user?.username;
+    if(parentId===undefined){
+      parentId='';
+    }
+    
+    if(userId==undefined){
+      userId = 1;
+    }
+  
+    if(username==undefined){
+      username='Guest';
+    }
+  
+    var commentId = database
+    .ref(`Posts/${postId}/comments`)
+    .push({
+        id: 0,
+        postId: postId,
+        body: text,
+        parentId: parentId,
+        userId: userId,
+        username: username,
+        create_date: Date.now(),
+        vote_numbers: 0
+        })
+    .key;
+    var commentRef = `Posts/${postId}/comments/` + commentId; 
+    database
+      .ref(commentRef)
+      .update({
+        id: commentId
+    });
+
+  return commentId;
+  }
+
+export async function getCommentsByPostId(postId) {
+  let result;
+  await database.ref(`Posts/${postId}/comments`).once("value", snapshot => {
+    if (snapshot.exists()) {
+      result = snapshotToArray(snapshot);
+    }
+  });
+ 
+  return result;
+}
+
+export async function getCommentByCommentId(postId,commentId) {
+  let result;
+  await database.ref(`Posts/${postId}/comments/${commentId}`).once("value", snapshot => {
+    if (snapshot.exists()){
+      result = snapshotToArray(snapshot)[0];
+    }
+  });
+  return result;
+}
+
+export async function deleteCommentApi(commentId){
+  database.ref('Comments').child(commentId).remove();
+}
+
+export async function updateCommentApi(text){
+  return { text };
+}
