@@ -18,6 +18,7 @@ export default function Footer({ votes, comments, content }) {
     const [ vote_num, setVote_num ] = useState(votes);
 
     var saved;
+    var vote_numbers = vote_num;
     const [save, setSave] = useState(false);
     
     const handleSave = async () => {
@@ -36,8 +37,18 @@ export default function Footer({ votes, comments, content }) {
                 });
         }
 
+        async function getVotes() {
+            await database
+                .ref(`Posts/${content?.key}`)
+                .on('value', (snapshot) => {
+                    vote_numbers = snapshot.val().vote_numbers;
+                    setVote_num(vote_numbers);
+                });
+        }
+
+        getVotes();
         getSaved();
-    }, saved);
+    }, [saved, vote_numbers]);
 
     const upvote = async (event) => {
         event.preventDefault();
@@ -51,10 +62,9 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: vote_num+1
+        vote_numbers: vote_numbers+1
         });
 
-        setVote_num(vote_num+1);
         setIsVoted(true);
         // window.location.reload();
     };
@@ -70,9 +80,8 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: vote_num-1
+        vote_numbers: vote_numbers-1
         });
-        setVote_num(vote_num-1);
         setIsVoted(false);
         //window.location.reload();
     }
