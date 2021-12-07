@@ -19,10 +19,10 @@ import { database} from '../../lib/firebase';
     const [password, setPassword] = useState('');
     const [passwordCheck, setPasswordCheck] = useState('');
     // update group
-    const [group, setGroup] = useState(user.group);
+    //const [group, setGroup] = useState(user.group);
 
-    const isInvalid = (password === '' || passwordCheck === '') && imageSrc === '' && (group === user.group);
-    const valid = (password !== '' && passwordCheck !== '' && passwordCheck === password) || (imageSrc !== '') || (group !== user.group);
+    const isInvalid = (password === '' || passwordCheck === '') && imageSrc === '' ;
+    const valid = (password !== '' && passwordCheck !== '' && passwordCheck === password) || (imageSrc !== '');
     const imgValid = (imageSrc !== '');
     const options = [
       {
@@ -65,7 +65,7 @@ import { database} from '../../lib/firebase';
       //console.log(user);
 
 
-      if (group !== user.group){
+      /*if (group !== user.group){
         if (imageSrc === ''){
           await realtimeDb.ref('Users/' + user.key).set({
             avatar: user.avatar,
@@ -82,7 +82,7 @@ import { database} from '../../lib/firebase';
             username: user.username,
           });
         }
-      }
+      }*/
       //console.log(user);
       if(valid){
         if(imgValid){
@@ -103,10 +103,10 @@ import { database} from '../../lib/firebase';
 
     
     // update group
-    const onGroupChange = (e) => {
-      setGroup(e.target.value);
+    //const onGroupChange = (e) => {
+     // setGroup(e.target.value);
       //console.log(group);
-    }
+    //}
 
     // update avatar
     const onImageChange = (event) => {
@@ -173,28 +173,20 @@ import { database} from '../../lib/firebase';
             
             <input
               type="text"
-              placeholder="パスワード確認"
+              placeholder="パスワード"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setPassword(target.value)}
               value={password}
             />
             <input
               type="password"
-              placeholder="フールネーム"
+              placeholder="パスワード確認"
               className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
               onChange={({ target }) => setPasswordCheck(target.value)}
               value={passwordCheck}
             />
-            <select
-              style={{height: 100 + 'px'}}
-              className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
-              onChange={onGroupChange}
-              value={group}>
-              <option hidden>グルプル選択</option>
-              {options.map((option) => (
-              <option value={option.value}>{option.label}</option>
-              ))}
-            </select>
+          
+
 
             <div>
                 <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'}`}   
@@ -219,3 +211,14 @@ import { database} from '../../lib/firebase';
     </>
     );
   }
+
+ /* <select
+  style={{height: 100 + 'px'}}
+  className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
+  onChange={onGroupChange}
+  value={group}>
+  <option hidden>グルプル選択</option>
+  {options.map((option) => (
+  <option value={option.value}>{option.label}</option>
+  ))}
+</select>*/
