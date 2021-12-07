@@ -8,14 +8,17 @@ import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
 import useCheckVotes from '../../hooks/use-check-votes';
+import { snapshotToArray } from '../../services/firebase';
 
 export default function Footer({ votes, comments, content }) {
     const { user: loggedInUser } = useContext(UserContext);
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
-    const { isVoted, id } = useCheckVotes(user?.user_id, content?.key);
+    const { isVoted, id, setIsVoted } = useCheckVotes(user?.user_id, content?.key);
+    const [ vote_num, setVote_num ] = useState(votes);
 
     var saved;
+    var vote_numbers = vote_num;
     const [save, setSave] = useState(false);
     
     const handleSave = async () => {
@@ -34,8 +37,18 @@ export default function Footer({ votes, comments, content }) {
                 });
         }
 
+        async function getVotes() {
+            await database
+                .ref(`Posts/${content?.key}`)
+                .on('value', (snapshot) => {
+                    vote_numbers = snapshot.val().vote_numbers;
+                    setVote_num(vote_numbers);
+                });
+        }
+
+        getVotes();
         getSaved();
-    }, saved);
+    }, [saved, vote_numbers]);
 
     const upvote = async (event) => {
         event.preventDefault();
@@ -49,10 +62,11 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: content?.vote_numbers+1
+        vote_numbers: vote_numbers+1
         });
-        
-         window.location.reload();
+
+        setIsVoted(true);
+        // window.location.reload();
     };
 
     const downvote = async (event) => {
@@ -66,10 +80,10 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: content?.vote_numbers-1
+        vote_numbers: vote_numbers-1
         });
-
-        window.location.reload();
+        setIsVoted(false);
+        //window.location.reload();
     }
 
     return (
@@ -84,7 +98,7 @@ export default function Footer({ votes, comments, content }) {
                     <ArrowDropDownIcon onClick={downvote} className="mr-1"/>
                     }
 
-                    <div>{votes}</div>
+                    <div>{vote_num}</div>
                 </div>
                 <div className="font-bold flex flex-row justify-center items-center">
                     <ChatBubbleOutlineIcon className="mr-1" />
