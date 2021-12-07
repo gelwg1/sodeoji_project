@@ -9,6 +9,7 @@ import Dialog from '@material-ui/core/Dialog';
 import EditProfile from './edit-profile';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import { withStyles } from '@material-ui/core/styles';
+import { useParams } from 'react-router';
 
 const DialogActions = withStyles((theme) => ({
   root: {
@@ -29,6 +30,8 @@ export default function Header({
   const { user } = useUser(loggedInUser?.uid);
 
   const [open, setOpen] = useState(false);
+
+  const { type, username } = useParams();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -56,7 +59,7 @@ export default function Header({
         <div className="container flex justify-between items-center">
           <p className="text-2xl mr-4">{profileUsername}</p>
 
-          <div>
+          {username == user?.username ? (<div>
             <button className={` bg-green-medium text-white px-4 rounded h-8 font-bold `}
               onClick={handleClickOpen}
             > プロフィールを編集
@@ -64,7 +67,9 @@ export default function Header({
             <Dialog open={open}>
               <EditProfile user={user} handleClose={handleClose} />
             </Dialog>
-          </div>
+          </div>) : null
+          }
+
 
 
         </div>

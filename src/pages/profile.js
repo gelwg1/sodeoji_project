@@ -25,6 +25,7 @@ export default function Profile() {
     }
 
     checkUserExists();
+    document.title = 'プロフィール';
   }, [username, history]);
 
   return user?.username ? (
