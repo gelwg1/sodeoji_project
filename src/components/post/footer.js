@@ -45,7 +45,6 @@ export default function Footer({ votes, comments, content }) {
                     setVote_num(vote_numbers);
                 });
         }
-
         getVotes();
         getSaved();
     }, [saved, vote_numbers]);
@@ -64,9 +63,6 @@ export default function Footer({ votes, comments, content }) {
         .update({
         vote_numbers: vote_numbers+1
         });
-
-        setIsVoted(true);
-        // window.location.reload();
     };
 
     const downvote = async (event) => {
@@ -82,8 +78,6 @@ export default function Footer({ votes, comments, content }) {
         .update({
         vote_numbers: vote_numbers-1
         });
-        setIsVoted(false);
-        //window.location.reload();
     }
 
     return (

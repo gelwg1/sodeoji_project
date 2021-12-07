@@ -12,6 +12,8 @@ export default function useCheckVotes(uid, post_id) {
         let result;
         await database.ref('Votes').orderByChild('user_id').equalTo(uid).on("value", snapshot => {
             if (snapshot.exists()) {
+                console.log('change');
+                setIsVoted(false);
                 result = snapshotToArray(snapshot);
                 result.forEach(element => { 
                     if (element?.post_id == post_id) {
@@ -21,13 +23,15 @@ export default function useCheckVotes(uid, post_id) {
                 });
             }
         });
+
+        await database.ref('Votes').on("child_removed", snapshot => {
+            setIsVoted(false);
+        })
     }
     if (uid && post_id) {
         check(uid, post_id);
-        
-    console.log(id);
     }
-  }, [uid,post_id]);
+  }, [uid,post_id, database]);
 
   return { isVoted, id, setIsVoted };
 }
