@@ -8,12 +8,14 @@ import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
 import useCheckVotes from '../../hooks/use-check-votes';
+import { snapshotToArray } from '../../services/firebase';
 
 export default function Footer({ votes, comments, content }) {
     const { user: loggedInUser } = useContext(UserContext);
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
-    const { isVoted, id } = useCheckVotes(user?.user_id, content?.key);
+    const { isVoted, id, setIsVoted } = useCheckVotes(user?.user_id, content?.key);
+    const [ vote_num, setVote_num ] = useState(votes);
 
     var saved;
     const [save, setSave] = useState(false);
@@ -49,10 +51,12 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: content?.vote_numbers+1
+        vote_numbers: vote_num+1
         });
-        
-         window.location.reload();
+
+        setVote_num(vote_num+1);
+        setIsVoted(true);
+        // window.location.reload();
     };
 
     const downvote = async (event) => {
@@ -66,10 +70,11 @@ export default function Footer({ votes, comments, content }) {
         .ref('Posts')
         .child(content.key)
         .update({
-        vote_numbers: content?.vote_numbers-1
+        vote_numbers: vote_num-1
         });
-
-        window.location.reload();
+        setVote_num(vote_num-1);
+        setIsVoted(false);
+        //window.location.reload();
     }
 
     return (
@@ -84,7 +89,7 @@ export default function Footer({ votes, comments, content }) {
                     <ArrowDropDownIcon onClick={downvote} className="mr-1"/>
                     }
 
-                    <div>{votes}</div>
+                    <div>{vote_num}</div>
                 </div>
                 <div className="font-bold flex flex-row justify-center items-center">
                     <ChatBubbleOutlineIcon className="mr-1" />
