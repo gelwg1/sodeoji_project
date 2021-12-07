@@ -5,6 +5,8 @@ import FirebaseContext from '../context/firebase';
 import UserContext from '../context/user';
 import useUser from '../hooks/use-user';
 import * as ROUTES from '../constants/routes';
+import Skeleton from 'react-loading-skeleton';
+import { DEFAULT_IMAGE_PATH } from '../constants/paths';
 
 export default function Header() {
   const { user: loggedInUser } = useContext(UserContext);
@@ -18,11 +20,24 @@ export default function Header() {
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
             <a className="w-full" href={ROUTES.DASHBOARD}>
-                <img aria-label="logo" src="/images/logo.png" alt="Logo" className="w-2/5 h-full" />
+              <img aria-label="logo" src="/images/logo.png" alt="Logo" className="w-40 h-full" />
             </a>
           </div>
           <div className="text-gray-700 text-center flex items-center align-items">
             <>
+              <div className="container flex justify-center items-center">
+                {user ? (
+                  <img
+                    className="rounded-full w-thanh flex"
+                    src={user.avatar}
+                    onError={(e) => {
+                      e.target.src = DEFAULT_IMAGE_PATH;
+                    }}
+                  />
+                ) : (
+                  <Skeleton circle height={150} width={150} count={1} />
+                )}
+              </div>
               <Navbar className="bg-white" variant="light" bg="light" expand="lg">
                 <Container fluid>
                   <Navbar.Collapse id="navbar-light-example">
@@ -33,7 +48,7 @@ export default function Header() {
                         menuVariant="light"
                       >
                         <NavDropdown.Item href={`/p/${user?.username}`}>
-                            プロフィール
+                          プロフィール
                         </NavDropdown.Item>
                         <NavDropdown.Divider />
                         <NavDropdown.Item title="Sign Out"

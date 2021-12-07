@@ -15,28 +15,18 @@ export default function Footer({ votes, comments, content }) {
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
     const { isVoted, id, setIsVoted } = useCheckVotes(user?.user_id, content?.key);
-    const [ vote_num, setVote_num ] = useState(votes);
+    const [vote_num, setVote_num] = useState(votes);
 
     var saved;
     var vote_numbers = vote_num;
     const [save, setSave] = useState(false);
-    
+
     const handleSave = async () => {
         if (saved == null) await database.ref('Saves').child(`${user?.username}/${content?.key}`).set(1);
         else await database.ref('Saves').child(`${user?.username}/${content?.key}`).remove();
     }
 
     useEffect(() => {
-        async function getSaved() {
-            await database
-                .ref(`Saves/${user?.username}/${content?.key}`)
-                .on('value', (snapshot) => {
-                    saved = snapshot.val();
-                    if (saved) setSave(true);
-                    else setSave(false);
-                });
-        }
-
         async function getVotes() {
             await database
                 .ref(`Posts/${content?.key}`)
@@ -46,50 +36,63 @@ export default function Footer({ votes, comments, content }) {
                 });
         }
         getVotes();
+    }, [vote_numbers]);
+
+    useEffect(() => {
+        async function getSaved() {
+            await database
+                .ref(`Saves/${user?.username}/${content?.key}`)
+                .on('value', (snapshot) => {
+                    if (snapshot.val()) setSave(true);
+                    else setSave(false);
+                    saved = snapshot.val();
+                    console.log(saved);
+                });
+        }
         getSaved();
-    }, [saved, vote_numbers]);
+    }, saved);
 
     const upvote = async (event) => {
         event.preventDefault();
         await database
-        .ref('Votes')
-        .push({
-          post_id: content?.key,
-          user_id: user?.user_id
-    });
+            .ref('Votes')
+            .push({
+                post_id: content?.key,
+                user_id: user?.user_id
+            });
         await database
-        .ref('Posts')
-        .child(content.key)
-        .update({
-        vote_numbers: vote_numbers+1
-        });
+            .ref('Posts')
+            .child(content.key)
+            .update({
+                vote_numbers: vote_numbers + 1
+            });
     };
 
     const downvote = async (event) => {
         event.preventDefault();
         await database
-        .ref('Votes')
-        .child(id)
-        .remove();
+            .ref('Votes')
+            .child(id)
+            .remove();
 
         await database
-        .ref('Posts')
-        .child(content.key)
-        .update({
-        vote_numbers: vote_numbers-1
-        });
+            .ref('Posts')
+            .child(content.key)
+            .update({
+                vote_numbers: vote_numbers - 1
+            });
     }
 
     return (
         <div className="p-4 pt-2 pb-1">
             <div className="grid grid-cols-3 text-2xl">
                 <div className="font-bold flex flex-row justify-center items-center">
-                    {isVoted == false && 
-                    <ArrowDropUpIcon onClick={upvote} className="mr-1"/>
+                    {isVoted == false &&
+                        <ArrowDropUpIcon onClick={upvote} className="mr-1" />
                     }
-                    
+
                     {isVoted == true &&
-                    <ArrowDropDownIcon onClick={downvote} className="mr-1"/>
+                        <ArrowDropDownIcon onClick={downvote} className="mr-1" />
                     }
 
                     <div>{vote_num}</div>
