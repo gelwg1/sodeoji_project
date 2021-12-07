@@ -1,0 +1,51 @@
+.show-profile{
+    display: flex;
+    width: 65%;
+    margin-top: 100px;
+    margin-left: 17.5%;
+    margin-right: 17.5%;
+    padding-bottom: 50px;
+    background-color: rgba(0, 0, 0, 0.1);
+    flex-wrap: wrap;
+}
+
+.show-profile hr{
+    width: 70%;
+    margin-left: 15%;
+    margin-top: 20px;
+    height: 5px;
+}
+
+
+.show-profile-child{
+    width: 100%;
+    display: flex;
+    margin-right: 5%;
+    margin-top: 50px;
+    justify-content: center;
+}
+
+.show-profile-child h3{
+    font-size: 2em;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.show-profile-child h3 span{
+    font-size: 1em;
+    font-weight: normal;
+    margin-left: 300px;
+}
+
+.first-child{
+    justify-content: center;
+    margin-left: 0;
+}
+
+.first-child h3{
+    font-size: 3em;
+}
+
+.last-child h3{
+    margin-right: 70px;
+}
