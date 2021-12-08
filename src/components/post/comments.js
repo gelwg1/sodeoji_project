@@ -80,8 +80,10 @@ export default function Comments({ postId, user }) {
   useEffect(() => {
     async function getComments() {
       await database.ref(`Posts/${postId}/comments`).on('value', snapshot => {
-        setRootComments(snapshotToArray(snapshot));
-        console.log(rootComments);
+        if (snapshot.exists()) {
+          setRootComments(snapshotToArray(snapshot));
+          console.log(rootComments);
+        }
       });
     }
 
@@ -103,6 +105,7 @@ export default function Comments({ postId, user }) {
             activeComment={activeComment}
             setActiveComment={setActiveComment}
             addComment={addComment}
+            parentId={rootComment.parentId}
           />
         ))) : null}
       </div>
