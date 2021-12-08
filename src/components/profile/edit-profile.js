@@ -3,7 +3,7 @@ import FirebaseContext from '../../context/firebase';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { Fab, Grid } from '@material-ui/core';
 import { database } from '../../lib/firebase';
-import {snapshotToArray} from '../../services/firebase'
+import { snapshotToArray } from '../../services/firebase'
 
 
 export default function EditProfile({ user, handleClose }) {
@@ -46,15 +46,15 @@ export default function EditProfile({ user, handleClose }) {
     if (password !== '' && password === passwordCheck) {
       let current = firebase.auth().currentUser;
       current.updatePassword(password).then(() => {
-        console.log('success!Newpass:' + password);
+        // console.log('success!Newpass:' + password);
       }).catch((error) => {
-        console.error("fail");
+        // console.error("fail");
       });
     }
 
 
     if (imageSrc !== '') {
-      console.log(imageSrc);
+      // console.log(imageSrc);
       await realtimeDb.ref('Users/' + user.key).set({
         avatar: imageSrc,
         group: user.group,
@@ -70,7 +70,7 @@ export default function EditProfile({ user, handleClose }) {
       });
       const postRef = await realtimeDb.ref(`Posts`);
 
-      console.log(postList);
+      // console.log(postList);
       await (postList?.forEach((post) => {
         if (post.author === user?.username) postRef.child(`${post.key}/author_avatar`).set(imageSrc);
       }));
@@ -131,16 +131,18 @@ export default function EditProfile({ user, handleClose }) {
         setImgPost({ image: e.target.result });
       };
       reader.readAsDataURL(event.target.files[0]);
+
+      const file = event.target.files[0];
+      const storageRef = storage.ref();
+      let urlName = Date.now() + file.name;
+      const fileRef = storageRef.child(`/avatars/${urlName}`);
+      fileRef.put(file).then(() => {
+        fileRef.getDownloadURL().then(function (url) {
+          setImageSrc(url);
+        });
+      })
     }
-    const file = event.target.files[0];
-    const storageRef = storage.ref();
-    let urlName = Date.now() + file.name;
-    const fileRef = storageRef.child(`/avatars/${urlName}`);
-    fileRef.put(file).then(() => {
-      fileRef.getDownloadURL().then(function (url) {
-        setImageSrc(url);
-      });
-    })
+
   }
 
   return (
@@ -186,7 +188,7 @@ export default function EditProfile({ user, handleClose }) {
               </Fab>
             </label>
           </Grid>
-          {imgPost && <img id="target" className="padding-login" src={imgPost.image} alt=""/>}
+          {imgPost && <img id="target" className="padding-login" src={imgPost.image} alt="" />}
         </div>
 
         <input

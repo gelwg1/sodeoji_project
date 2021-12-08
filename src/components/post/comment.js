@@ -73,7 +73,7 @@ const Comment = ({
                     )}
                     {canDelete &&
                         <div className="comment-action"
-                            onClick={() => deleteComment(comment.id)}>消去</div>}
+                            onClick={() => deleteComment(comment.id)}>削除</div>}
                 </div>
                 {isReplying && (
                     <CommentForm

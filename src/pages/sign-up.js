@@ -41,7 +41,7 @@ export default function SignUp() {
           .ref('/Users')
           .push({
             user_id: createdUserResult.user.uid,
-            avatar: '/images/avatars/default.png',
+            avatar: DEFAULT_IMAGE_PATH,
             group: group,
             username: username,
           });
