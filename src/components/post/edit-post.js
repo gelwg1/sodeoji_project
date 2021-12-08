@@ -39,7 +39,7 @@ export default function EditPostInfor({content, handleClose}) {
         const fileRef = storageRef.child(`/posts/${file.name}`);
         fileRef.put(file).then(() => {
             fileRef.getDownloadURL().then(function (url) {
-                while (url==='')
+                while (url=='')
                     console.log(url);
 
                 setImageSrc(url);
@@ -50,7 +50,7 @@ export default function EditPostInfor({content, handleClose}) {
     return (
         <>
         <div className="flex flex-col bg-white p-4 rounded width-post">
-            <img src={content.image_url} alt=""/>
+            <img src={content.image_url} />
             <div className="p-4 py-5">
                 <Grid container justify="center" alignItems="center">
                     <input
@@ -67,7 +67,7 @@ export default function EditPostInfor({content, handleClose}) {
                     </Fab>
                     </label>
                 </Grid>
-                { newImgPost && <img id="target" className="padding-login" src={newImgPost.image} alt=""/> }
+                { newImgPost && <img id="target" className="padding-login" src={newImgPost.image}/> }
             </div>
 
             <label>
