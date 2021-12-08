@@ -8,7 +8,7 @@ import useUser from '../../hooks/use-user';
 import Dialog from '@material-ui/core/Dialog';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import { withStyles } from '@material-ui/core/styles';
-import NewPost from './new-post';
+import ChangePost from '../post/change-post';
 
 const DialogActions = withStyles((theme) => ({
     root: {
@@ -46,7 +46,7 @@ export default function Sidebar() {
                                 </button></Navbar.Brand>
                             <Dialog open={open}>
                                 <DialogActions>
-                                    <NewPost user={user} handleClose={handleClose} />
+                                    <ChangePost type="作成" handleClose={handleClose} />
                                 </DialogActions>
                             </Dialog>
                         </Container>
