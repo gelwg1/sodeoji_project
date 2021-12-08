@@ -8,7 +8,7 @@ import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
 import useCheckVotes from '../../hooks/use-check-votes';
-import { snapshotToArray } from '../../services/firebase';
+// import { snapshotToArray } from '../../services/firebase';
 
 export default function Footer({ votes, comments, content }) {
     const { user: loggedInUser } = useContext(UserContext);
@@ -46,7 +46,6 @@ export default function Footer({ votes, comments, content }) {
                     if (snapshot.val()) setSave(true);
                     else setSave(false);
                     saved = snapshot.val();
-                    console.log(saved);
                 });
         }
         getSaved();
@@ -87,11 +86,11 @@ export default function Footer({ votes, comments, content }) {
         <div className="p-4 pt-2 pb-1">
             <div className="grid grid-cols-3 text-2xl">
                 <div className="font-bold flex flex-row justify-center items-center">
-                    {isVoted == false &&
+                    {isVoted === false &&
                         <ArrowDropUpIcon onClick={upvote} className="mr-1" />
                     }
 
-                    {isVoted == true &&
+                    {isVoted === true &&
                         <ArrowDropDownIcon onClick={downvote} className="mr-1" />
                     }
 
@@ -112,5 +111,5 @@ export default function Footer({ votes, comments, content }) {
 Footer.propTypes = {
     votes: PropTypes.number.isRequired,
     comments: PropTypes.number.isRequired,
-    content: PropTypes.string.isRequired
+    content: PropTypes.object.isRequired
 };

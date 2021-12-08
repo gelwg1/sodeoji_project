@@ -15,7 +15,7 @@ export default function useCheckVotes(uid, post_id) {
                 setIsVoted(false);
                 result = snapshotToArray(snapshot);
                 result.forEach(element => { 
-                    if (element?.post_id == post_id) {
+                    if (element?.post_id === post_id) {
                         setIsVoted(true);
                         setId(element?.key);
                     }

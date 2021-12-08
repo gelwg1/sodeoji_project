@@ -27,7 +27,7 @@ export default function Timeline({ type, param2 }) {
           return (
             <>
               <Post content={content} />
-              {type == 'post-details' ? (
+              {type === 'post-details' ? (
                 <Comments
                   postId={posts.postId}
                   comments={posts.comments}

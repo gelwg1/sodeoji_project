@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+// import { useRef } from 'react';
 import PropTypes from 'prop-types';
 import Header from './header';
 import Image from './image';
@@ -27,6 +27,9 @@ Post.propTypes = {
     create_date: PropTypes.number.isRequired,
     comment_numbers: PropTypes.number.isRequired,
     vote_numbers: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired
+    comments: PropTypes.oneOfType([
+      PropTypes.array.isRequired,
+      PropTypes.object.isRequired
+    ])
   })
 };

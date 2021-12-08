@@ -53,7 +53,7 @@ export default function NewPost({user, handleClose}) {
         const fileRef = storageRef.child(`/posts/${file.name}`);
         fileRef.put(file).then(() => {
             fileRef.getDownloadURL().then(function (url) {
-                while (url=='')
+                while (url==='')
                     console.log(url);
 
                 setImageSrc(url);
@@ -80,7 +80,7 @@ export default function NewPost({user, handleClose}) {
                     </Fab>
                     </label>
                 </Grid>
-                { imgPost && <img id="target" className="padding-login" src={imgPost.image}/> }
+                { imgPost && <img id="target" className="padding-login" src={imgPost.image} alt=""/> }
             </div>
 
             <input

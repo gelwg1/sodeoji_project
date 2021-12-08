@@ -139,12 +139,12 @@ export async function getPosts(type, param2, user) {
   switch (type) {
     case "post-details":
       result = await Promise.all(result.filter((item) => {
-        return item.key == param2;
+        return item.key === param2;
       }));
       break;
     case "post":
       result = await Promise.all(result.filter((item) => {
-        return (user?.username == item.author)
+        return (user?.username === item.author)
       }));
       break;
     case "save":
@@ -158,7 +158,7 @@ export async function getPosts(type, param2, user) {
       break;
     default:
       result = await Promise.all(result.filter((item) => {
-        return (user?.group == item.group)
+        return (user?.group === item.group)
       }));
       break;
   }

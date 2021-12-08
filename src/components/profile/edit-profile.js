@@ -1,4 +1,4 @@
-import { useState, React, useContext, useEffect } from 'react';
+import { useState, React, useContext } from 'react';
 import FirebaseContext from '../../context/firebase';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { Fab, Grid } from '@material-ui/core';
@@ -25,20 +25,20 @@ export default function EditProfile({ user, handleClose }) {
   const isInvalid = (password === '' || passwordCheck === '') && imageSrc === '';
   const valid = (password !== '' && passwordCheck !== '' && passwordCheck === password) || (imageSrc !== '');
   const imgValid = (imageSrc !== '');
-  const options = [
-    {
-      label: "中学生",
-      value: "中学生",
-    },
-    {
-      label: "高学生",
-      value: "高学生",
-    },
-    {
-      label: "大学生",
-      value: "大学生",
-    },
-  ];
+  // const options = [
+  //   {
+  //     label: "中学生",
+  //     value: "中学生",
+  //   },
+  //   {
+  //     label: "高学生",
+  //     value: "高学生",
+  //   },
+  //   {
+  //     label: "大学生",
+  //     value: "大学生",
+  //   },
+  // ];
 
   // Update profile
   const handleUpdateUserProfile = async (event) => {
@@ -72,8 +72,7 @@ export default function EditProfile({ user, handleClose }) {
 
       console.log(postList);
       await (postList?.forEach((post) => {
-        console.log(post.author == user?.username);
-        if (post.author == user?.username) postRef.child(`${post.key}/author_avatar`).set(imageSrc);
+        if (post.author === user?.username) postRef.child(`${post.key}/author_avatar`).set(imageSrc);
       }));
 
     }
@@ -187,7 +186,7 @@ export default function EditProfile({ user, handleClose }) {
               </Fab>
             </label>
           </Grid>
-          {imgPost && <img id="target" className="padding-login" src={imgPost.image} />}
+          {imgPost && <img id="target" className="padding-login" src={imgPost.image} alt=""/>}
         </div>
 
         <input

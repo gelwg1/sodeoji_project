@@ -13,7 +13,7 @@ const Dashboard = lazy(() => import('./pages/dashboard'));
 const Profile = lazy(() => import('./pages/profile'));
 const EditProfile = lazy(() => import('./pages/edit-profile'));
 const NotFound = lazy(() => import('./pages/not-found'));
-const PostDetail = lazy(() => import('./pages/post-detail'));
+// const PostDetail = lazy(() => import('./pages/post-detail'));
 
 export default function App() {
   const { user } = useAuthListener();

@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, useHistory } from 'react-router-dom';
 import { useRef } from 'react';
 import { getPostByPostId } from '../services/firebase';
@@ -28,7 +28,7 @@ export default function PostDetail() {
   }, [postId, history]);
 
   const commentInput = useRef(null);
-  const handleFocus = () => commentInput.current.focus();
+  // const handleFocus = () => commentInput.current.focus();
 
   return (
     <div className="bg-gray-background">
