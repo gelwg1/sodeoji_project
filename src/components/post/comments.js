@@ -7,31 +7,24 @@ import FirebaseContext from '../../context/firebase';
 import "../../styles/comments.css";
 
 export default function Comments({ postId, user }) {
-  const [backendComments, setBackendComments] = useState([]);
+  const [backendComments, setBackendComments] = useState(null);
   const [activeComment, setActiveComment] = useState(null);
   const { database, storage } = useContext(FirebaseContext);
-
-  // var rootComments = [];
-  // var listComments = database.ref(`Posts/${postId}/comments`).once('value', (snapshot) => {
-  //   if (snapshot.exists()){
-  //     // rootComments.push(snapshotToArray(snapshot));
-  //      rootComments = snapshotToArray(snapshot);
-  //   };
-  // });
-  const [rootComments, setRootComments] = useState();
+  const [rootComments, setRootComments] = useState(null);
 
 
-  const getReplies = commentId => {
+  const getReplies = (commentId) => {
     return backendComments
-      .filter(backendComments => backendComments.parentId === commentId)
+      .filter(backendComment => backendComment.parentId === commentId)
       .sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.create_date).getTime() - new Date(b.create_date).getTime()
       );
   };
 
 
   const addComment = (text, parentId) => {
+    console.log(text, parentId)
     var userId = user?.user_id;
     var username = user?.username;
     if (parentId === undefined) {
@@ -48,7 +41,8 @@ export default function Comments({ postId, user }) {
         userId: userId,
         username: username,
         create_date: Date.now(),
-        vote_numbers: 0
+        vote_numbers: 0,
+        avatar: user?.avatar
       })
       .key;
     var commentRef = `Posts/${postId}/comments/` + commentId;
@@ -76,20 +70,22 @@ export default function Comments({ postId, user }) {
     }
   };
 
-  // console.log(rootComments);
   useEffect(() => {
     async function getComments() {
       await database.ref(`Posts/${postId}/comments`).on('value', snapshot => {
         if (snapshot.exists()) {
-          setRootComments(snapshotToArray(snapshot));
+          setBackendComments(snapshotToArray(snapshot));
+          setRootComments(backendComments?.filter(
+            (backendComment) => backendComment.parentId === ''
+          ));
           console.log(rootComments);
+          console.log(backendComments);
         }
       });
     }
 
     getComments();
-  }, rootComments?.length);
-
+  }, backendComments?.length);
 
   return (
     <div className="comments p-4 pt-1 pb-4">

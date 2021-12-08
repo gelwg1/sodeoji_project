@@ -15,7 +15,9 @@ const CommentForm = ({ handleSubmit, submitLabel }) => {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
             />
-            <button className="comment-form-buton" disabled={isTextareaDisable}>{submitLabel}</button>
+            <button className="comment-form-buton" disabled={isTextareaDisable}>
+                {submitLabel}
+                </button>
        </form>
     )
 };
