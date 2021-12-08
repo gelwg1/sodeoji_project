@@ -1,0 +1,114 @@
+import CommentForm from "./comment-form";
+
+const Comment = ({
+    data,
+    comment,
+    replies,
+    user,
+    addComment,
+    updateComment,
+    deleteComment,
+    activeComment,
+    setActiveComment,
+    parentId
+}) => {
+    const canReply = Boolean(user?.user_id);
+    const canEdit = user?.user_id === comment.userId;
+    const canDelete = user?.user_id === comment.userId;
+    const isEditing =
+        activeComment &&
+        activeComment.id === comment.id &&
+        activeComment.type === "editing";
+    const isReplying =
+        activeComment &&
+        activeComment.type === "replying" &&
+        activeComment.id === comment.id;
+    const replyId = parentId ? parentId : comment.id;
+    const date = new Intl.DateTimeFormat('en-US', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(comment.create_date);
+
+    // console.log(replies);
+    const getReplies = (commentId) => {
+        if (data) return data
+            .filter(data => data.parentId === commentId)
+            .sort(
+                (a, b) =>
+                    new Date(a.create_date).getTime() - new Date(b.create_date).getTime()
+            );
+    };
+
+    return (
+        <div key={comment.id} className="comment">
+            <div className="comment-image-container">
+                <img src={comment?.avatar} className="rounded-full w-thanh" alt="" />
+            </div>
+
+            <div className="comment-right-part">
+                <div className="comment-content">
+                    <div className="comment-author">{comment.username}</div>
+                    <div>{date}</div>
+                </div>
+                {!isEditing && <div className="comment-text">{comment.body}</div>}
+                {isEditing && (
+                    <CommentForm
+                        submitLabel="編集"
+                        hasCancelButton
+                        initialText={comment.body}
+                        handleSubmit={(text) => updateComment(text, comment.id)}
+                        handleCancel={() => {
+                            setActiveComment(null);
+                        }}
+                    />
+                )}
+
+                <div className="comment-actions">
+                    {canReply &&
+                        <div className="comment-action"
+                            onClick={() =>
+                                setActiveComment({ id: comment.id, type: "replying" })
+                            }>返事</div>}
+                    {canEdit && (
+                        <div className="comment-action"
+                            onClick={() => setActiveComment({ id: comment.id, type: "editing" })
+                            }>編集</div>
+                    )}
+                    {canDelete &&
+                        <div className="comment-action"
+                            onClick={() => deleteComment(comment.id)}>消去</div>}
+                </div>
+                {isReplying && (
+                    <CommentForm
+                        submitLabel="返事"
+                        hasCancelButton
+                        handleSubmit={(text) => addComment(text, replyId)}
+                        handleCancel={() => {
+                            setActiveComment(null);
+                        }}
+                    />
+                )}
+                {replies?.length > 0 ? (
+                    <div className="replies">
+                        {replies.map((reply) => (
+                            <Comment
+                                data={data}
+                                comment={reply}
+                                key={reply.id}
+                                replies={getReplies(reply.id)}
+                                user={user}
+                                deleteComment={deleteComment}
+                                activeComment={activeComment}
+                                setActiveComment={setActiveComment}
+                                updateComment={updateComment}
+                                addComment={addComment}
+                                parentId={reply.id}
+                            />
+                        ))}
+                    </div>
+                ) : null}
+            </div>
+        </div>
+
+
+    )
+};
+
+export default Comment;

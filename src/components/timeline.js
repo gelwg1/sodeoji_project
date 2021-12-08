@@ -29,10 +29,8 @@ export default function Timeline({ type, param2 }) {
               <Post content={content} />
               {type === 'post-details' ? (
                 <Comments
-                  postId={posts.postId}
-                  comments={posts.comments}
-                  postTime={posts.create_date}
-                  commentInput={commentInput}
+                  postId={content.postId}
+                  user={user}
                 />
               ) : null}
             </>
