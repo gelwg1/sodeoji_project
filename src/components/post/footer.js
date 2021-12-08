@@ -31,8 +31,10 @@ export default function Footer({ votes, comments, content }) {
             await database
                 .ref(`Posts/${content?.key}`)
                 .on('value', (snapshot) => {
-                    vote_numbers = snapshot.val().vote_numbers;
-                    setVote_num(vote_numbers);
+                    if (snapshot.exists()) {
+                        vote_numbers = snapshot.val().vote_numbers;
+                        setVote_num(vote_numbers);
+                    }
                 });
         }
         getVotes();
