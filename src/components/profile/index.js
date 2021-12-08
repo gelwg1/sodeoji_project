@@ -1,7 +1,7 @@
-import { useReducer, useEffect, useContext } from 'react';
+import { useReducer, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from './header';
-import UserContext from '../../context/user';
+// import UserContext from '../../context/user';
 
 export default function Profile({ user }) {
   const reducer = (state, newState) => ({ ...state, ...newState });
@@ -10,7 +10,7 @@ export default function Profile({ user }) {
     profile: {},
   };
 
-  const { user: loggedInUser } = useContext(UserContext);
+  // const { user: loggedInUser } = useContext(UserContext);
 
   const [{ profile }, dispatch] = useReducer(
     reducer,

@@ -45,8 +45,8 @@ export default function Header({ username, avatarSrc, date, content }) {
           alt={`Avatar`}
         />
         <p className="font-bold mr-3">{date} by {username}</p>
-        <div clsaaName="flex-end" style={{marginLeft: "auto", order: "2"}}>
-        { user?.username == username &&
+        <div className="flex-end" style={{marginLeft: "auto", order: "2"}}>
+        { user?.username === username &&
           <Dropdown>
             <Dropdown.Toggle id="dropdown-basic">
             </Dropdown.Toggle>
@@ -76,5 +76,5 @@ Header.propTypes = {
   username: PropTypes.string.isRequired,
   avatarSrc: PropTypes.string.isRequired,
   date: PropTypes.number.isRequired,
-  content: PropTypes.string.isRequired
+  content: PropTypes.object.isRequired
 };

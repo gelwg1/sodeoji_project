@@ -33,6 +33,7 @@ export default function Header() {
                     onError={(e) => {
                       e.target.src = DEFAULT_IMAGE_PATH;
                     }}
+                    alt=""
                   />
                 ) : (
                   <Skeleton circle height={150} width={150} count={1} />
