@@ -4,6 +4,7 @@ import Comment from './comment';
 import CommentForm from './comment-form';
 import { getCommentsByPostId, snapshotToArray, deleteCommentApi, getCommentByCommentId } from '../../services/firebase';
 import FirebaseContext from '../../context/firebase';
+import "../../styles/comments.css";
 
 export default function Comments({ postId, user }) {
   const [backendComments, setBackendComments] = useState([]);
@@ -78,12 +79,9 @@ export default function Comments({ postId, user }) {
   // console.log(rootComments);
   useEffect(() => {
     async function getComments() {
-      await database.ref(`Posts/${postId}/comments`).once('value', snapshot => {
-
-        if (snapshot.exists()) {
-          setRootComments(snapshotToArray(snapshot));
-          // console.log(rootComments);
-        }
+      await database.ref(`Posts/${postId}/comments`).on('value', snapshot => {
+        setRootComments(snapshotToArray(snapshot));
+        console.log(rootComments);
       });
     }
 
