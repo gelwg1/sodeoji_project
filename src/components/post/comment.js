@@ -1,4 +1,5 @@
 import CommentForm from "./comment-form";
+import Vote from "./vote";
 
 const Comment = ({
     data,
@@ -40,6 +41,10 @@ const Comment = ({
         <div key={comment.id} className="comment">
             <div className="comment-image-container">
                 <img src={comment?.avatar} className="rounded-full w-thanh" alt="" />
+                
+            <div className="font-bold flex flex-row justify-center items-center">
+                <Vote user={user} content={comment} linkdb={`Posts/${comment.postId}/comments`}/>
+            </div>
             </div>
 
             <div className="comment-right-part">
