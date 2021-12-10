@@ -39,10 +39,12 @@ const Comment = ({
 
     return (
         <div key={comment.id} className="comment">
-            
-                <Vote user={user} content={comment} linkdb={`Posts/${comment.postId}/comments`}/>
             <div className="comment-image-container">
                 <img src={comment?.avatar} className="rounded-full w-thanh" alt="" />
+                
+            <div className="font-bold flex flex-row justify-center items-center">
+                <Vote user={user} content={comment} linkdb={`Posts/${comment.postId}/comments`}/>
+            </div>
             </div>
 
             <div className="comment-right-part">
