@@ -24,7 +24,7 @@ export default function Comments({ postId, user }) {
   var dataSnapshot = [];
 
   const addComment = async (text, parentId) => {
-    console.log(text, parentId)
+    // console.log(text, parentId)
     var userId = user?.user_id;
     var username = user?.username;
     if (parentId === undefined) {
@@ -64,7 +64,31 @@ export default function Comments({ postId, user }) {
 
   const deleteComment = async (commentId) => {
     if (window.confirm('Are you sure that you want to remove comment?')) {
-      await database.ref(`Posts/${postId}/comments`).child(commentId).remove();
+      var deleteData = [];
+      var tempId;
+      var datas
+
+      deleteData.push(commentId);
+      while (deleteData.length !== 0) {
+        tempId = deleteData.shift();
+        await database.ref(`Posts/${postId}/comments`).child(tempId).remove();
+
+        await database.ref(`Posts/${postId}/comments`).get().then((snapshot) => {
+          if (snapshot.exists()) {
+            datas = snapshotToArray(snapshot);
+          } else {
+            datas = [];
+          }
+        }).catch((error) => {
+          console.error(error);
+        });
+
+        await Promise.all(datas.map(function (data) {
+          if (data.parentId === tempId) deleteData.push(data.id);
+        }));
+        // console.log(datas);
+        // console.log(deleteData);
+      }
     }
   };
 
@@ -74,7 +98,6 @@ export default function Comments({ postId, user }) {
         if (snapshot.exists()) {
           // console.log(snapshot.val());
           dataSnapshot = snapshotToArray(snapshot);
-          console.log(dataSnapshot);
 
           setActiveComment(null);
 
@@ -85,8 +108,25 @@ export default function Comments({ postId, user }) {
               (comment) => comment.parentId === ''
             )
           });
-          console.log(backendComments);
-          console.log(rootComments);
+
+          // console.log(dataSnapshot);
+          // console.log(backendComments);
+          // console.log(rootComments);
+        } else {
+          dataSnapshot = [];
+          setActiveComment(null);
+
+          setBackendComments(dataSnapshot);
+
+          setRootComments(() => {
+            return dataSnapshot.filter(
+              (comment) => comment.parentId === ''
+            )
+          });
+
+          // console.log(dataSnapshot);
+          // console.log(backendComments);
+          // console.log(rootComments);
         }
       });
     }

@@ -10,7 +10,7 @@ export default function ChangePost({ type, post, handleClose }) {
     const { user } = useUser(loggedInUser?.uid);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [imgPost, setImgPost] = useState('');
+    // const [imgPost, setImgPost] = useState('');
     const [imgSrc, setImgSrc] = useState('');
     const { database, storage } = useContext(FirebaseContext);
 
@@ -47,14 +47,12 @@ export default function ChangePost({ type, post, handleClose }) {
                 postId: user?.username,
                 author: user?.username,
                 author_avatar: user?.avatar,
-                comment_numbers: 0,
                 content: content,
                 create_date: Date.now(),
                 group: user?.group,
                 image_url: imgSrc,
                 title: title,
-                vote_numbers: 0,
-                comments: ['']
+                vote_numbers: 0
             })
             .key;
         var postRef = 'Posts/' + postId;
@@ -71,9 +69,9 @@ export default function ChangePost({ type, post, handleClose }) {
         // console.log(event.target.files.length);
         if (event.target.files && event.target.files[event.target.files.length - 1]) {
             let reader = new FileReader();
-            reader.onload = (e) => {
-                setImgPost({ image: e.target.result });
-            };
+            // reader.onload = (e) => {
+            //     setImgPost({ image: e.target.result });
+            // };
             reader.readAsDataURL(event.target.files[event.target.files.length - 1]);
             const file = event.target.files[event.target.files.length - 1];
             const storageRef = storage.ref();
