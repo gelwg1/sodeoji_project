@@ -57,7 +57,7 @@ export default function SignUp() {
     } else {
       setPassword('');
       setPasswordCheck('');
-      setError("パスワード確認が間違えた！");
+      setError("パスワード確認が間違えた!");
     }
 
   };
@@ -123,7 +123,7 @@ export default function SignUp() {
                   className="text-sm text-gray-base w-full mr-3 px-4 h-16 border border-gray-primary rounded mb-2"
                   onChange={({ target }) => setGroup(target.value)}
                   value={`${group}`}>
-                  <option hidden>グルプル選択</option>
+                  <option hidden>グループ選択</option>
                   {groups && <Options options={groups} />}
                 </select>
               )}
