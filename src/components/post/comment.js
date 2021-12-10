@@ -32,8 +32,10 @@ const Comment = ({
         if (data) return data
             .filter(data => data.parentId === commentId)
             .sort(
-                (a, b) =>
-                    new Date(a.create_date).getTime() - new Date(b.create_date).getTime()
+                (a, b) => {
+                    if (b.vote_numbers !== a.vote_numbers) return b.vote_numbers - a.vote_numbers;
+                    else return new Date(a.create_date).getTime() - new Date(b.create_date).getTime();
+                }
             );
     };
 
@@ -41,10 +43,10 @@ const Comment = ({
         <div key={comment.id} className="comment">
             <div className="comment-image-container">
                 <img src={comment?.avatar} className="rounded-full w-thanh" alt="" />
-                
-            <div className="font-bold flex flex-row justify-center items-center">
-                <Vote user={user} content={comment} linkdb={`Posts/${comment.postId}/comments`}/>
-            </div>
+
+                <div className="font-bold flex flex-row justify-center items-center">
+                    <Vote user={user} content={comment} linkdb={`Posts/${comment.postId}/comments`} />
+                </div>
             </div>
 
             <div className="comment-right-part">

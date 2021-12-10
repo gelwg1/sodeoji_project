@@ -16,8 +16,10 @@ export default function Comments({ postId, user }) {
     return (backendComments
       .filter(backendComment => backendComment.parentId === commentId)
       .sort(
-        (a, b) =>
-          new Date(a.create_date).getTime() - new Date(b.create_date).getTime()
+        (a, b) => {
+          if (b.vote_numbers !== a.vote_numbers) return b.vote_numbers - a.vote_numbers;
+          else return new Date(a.create_date).getTime() - new Date(b.create_date).getTime();
+        }
       ));
   };
 
