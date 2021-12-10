@@ -25,7 +25,6 @@ Post.propTypes = {
     title: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     create_date: PropTypes.number.isRequired,
-    comment_numbers: PropTypes.number.isRequired,
     vote_numbers: PropTypes.number.isRequired,
     comments: PropTypes.oneOfType([
       PropTypes.array.isRequired,

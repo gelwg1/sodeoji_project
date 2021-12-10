@@ -6,14 +6,16 @@ import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
 import Vote from './vote';
-// import { snapshotToArray } from '../../services/firebase';
+import { snapshotToArray } from '../../services/firebase';
 
-export default function Footer({ votes, comments, content }) {
+export default function Footer({ votes, content }) {
     const { user: loggedInUser } = useContext(UserContext);
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
+    const [commentNumbers, setCommentNumbers] = useState(0);
 
     var saved;
+    var com_num;
     const [save, setSave] = useState(false);
 
     const handleSave = async () => {
@@ -34,7 +36,24 @@ export default function Footer({ votes, comments, content }) {
         getSaved();
     }, saved);
 
-    
+    useEffect(() => {
+        async function getCommentsNumbers() {
+            await database
+                .ref(`Posts/${content?.key}/comments`)
+                .on('value', (snapshot) => {
+                    if (snapshot.exists()) {
+                        const comments = (snapshotToArray(snapshot));
+                        com_num = comments?.length;
+                        setCommentNumbers(com_num);
+                    } else {
+                        com_num = 0;
+                        setCommentNumbers(com_num);
+                    }
+                });
+        }
+        getCommentsNumbers();
+    }, []);
+
     return (
         <div className="p-4 pt-2 pb-1">
             <div className="grid grid-cols-3 text-2xl">
@@ -43,7 +62,7 @@ export default function Footer({ votes, comments, content }) {
                 </div>
                 <div className="font-bold flex flex-row justify-center items-center">
                     <ChatBubbleOutlineIcon className="mr-1" />
-                    <div>{comments}</div>
+                    <div>{commentNumbers}</div>
                 </div>
                 <div className="font-bold flex justify-center items-center">
                     <GetAppIcon onClick={handleSave} className="cursor-pointer rounded-full" fontSize="large" style={save ? { backgroundColor: 'green', fill: 'white' } : {}} />
@@ -55,6 +74,5 @@ export default function Footer({ votes, comments, content }) {
 
 Footer.propTypes = {
     votes: PropTypes.number.isRequired,
-    comments: PropTypes.number.isRequired,
     content: PropTypes.object.isRequired
 };
