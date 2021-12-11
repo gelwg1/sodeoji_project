@@ -392,7 +392,15 @@ img {
 }
 
 textarea {
-  resize: vertical;
+  resize: none;
+  outline: none;
+  overflow-wrap: break-word;
+}
+
+p {
+  word-break: break-all;
+  /* white-space: normal; */
+  white-space: pre-line;
 }
 
 input::placeholder,
