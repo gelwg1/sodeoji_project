@@ -771,6 +771,14 @@ video {
   margin-bottom: 3rem;
 }
 
+.mt-16 {
+  margin-top: 4rem;
+}
+
+.mb-16 {
+  margin-bottom: 4rem;
+}
+
 .max-w-screen-md {
   max-width: 768px;
 }
@@ -1002,7 +1010,7 @@ video {
 }
 
 .grid-cols-3 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 200px auto 200px;
 }
 
 .grid-cols-4 {
@@ -1048,6 +1056,17 @@ Css in Edit-profile (fail and success)
   display: block;
   top: 10%;
 }
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+
+.relative {
+  position: relative;
+}
+
 /* end */
 @keyframes spin {
   to {

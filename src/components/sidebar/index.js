@@ -29,7 +29,7 @@ export default function Sidebar() {
         setOpen(false);
     };
     return (
-        <div className="bg-white h-screen w-30 border-gray-primary border flex flex-col items-center">
+        <div className="bg-white h-screen w-full border-gray-primary border flex flex-col items-center sticky">
             <Navbar className="bg-blue-medium mx-auto w-full mt-4">
                 <Container className="flex flex-col justify-center items-center">
                     <Navbar.Brand className="text-white text-xl" href={ROUTES.DASHBOARD}>ホーム</Navbar.Brand>
