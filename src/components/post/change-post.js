@@ -76,7 +76,7 @@ export default function ChangePost({ type, post, handleClose }) {
             const file = event.target.files[event.target.files.length - 1];
             const storageRef = storage.ref();
             let urlName = Date.now() + file.name;
-            const fileRef = storageRef.child(`/avatars/${urlName}`);
+            const fileRef = storageRef.child(`/posts/${urlName}`);
             fileRef.put(file).then(() => {
                 fileRef.getDownloadURL().then(function (url) {
                     setImgSrc(url);

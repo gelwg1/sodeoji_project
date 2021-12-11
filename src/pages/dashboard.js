@@ -21,7 +21,7 @@ export default function Dashboard({ user: loggedInUser }) {
         <Header />
         <div className="grid grid-cols-3">
           <Sidebar />
-          <div className="justify-between mx-auto max-w-screen-lg">
+          <div className={type === 'post-details' ? "max-w-screen-lg justify-between mx-auto" : "max-w-screen-md justify-between mx-auto"}>
             <Timeline type={type} param2={param2}/>
           </div>
         </div>

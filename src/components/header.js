@@ -16,7 +16,7 @@ export default function Header() {
 
   return (
     <header className="h-16 bg-white border-b border-gray-primary">
-      <div className="container mx-auto max-w-screen-lg h-full">
+      <div className="container mx-auto max-w-screen-md h-full">
         <div className="flex justify-between h-full">
           <div className="text-gray-700 text-center flex items-center align-items cursor-pointer">
             <a className="w-full" href={ROUTES.DASHBOARD}>
