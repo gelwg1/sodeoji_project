@@ -155,8 +155,10 @@ export default function Comments({ postId, user }) {
           />
         ))) : null}
       </div>
-      <div className="comment-form-title">コメントして</div>
-      <CommentForm submitLabel="コメント" handleSubmit={addComment} />
+      <div className="comment-form-title">コメント箱</div>
+      <div className="mb-4">
+        <CommentForm submitLabel="コメント" handleSubmit={addComment} />
+      </div>
     </div>
   );
 }

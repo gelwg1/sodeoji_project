@@ -19,7 +19,7 @@ export default function Dashboard({ user: loggedInUser }) {
     <LoggedInUserContext.Provider value={{ user, setActiveUser }}>
       <div className="bg-gray-background">
         <Header />
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-3-new">
           <Sidebar />
           <div className={type === 'post-details' ? "max-w-screen-lg justify-between mx-auto" : "max-w-screen-md justify-between mx-auto"}>
             <Timeline type={type} param2={param2}/>

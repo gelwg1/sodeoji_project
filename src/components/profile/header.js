@@ -42,10 +42,10 @@ export default function Header({
 
   return (
     <div className="grid grid-cols-3 gap-4 justify-between mx-auto max-w-screen-lg">
-      <div className="container flex justify-center items-center">
+      <div className=" container flex justify-center items-center">
         {user ? (
           <img
-            className="rounded-full  h-40 w-40 flex"
+            className="rounded-full h-40 w-40 flex"
             src={avatar}
             onError={(e) => {
               e.target.src = DEFAULT_IMAGE_PATH;

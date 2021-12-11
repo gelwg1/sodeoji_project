@@ -68,11 +68,19 @@ export default function EditProfile({ user, handleClose }) {
           postList = snapshotToArray(snapshot);
         }
       });
-      const postRef = await realtimeDb.ref(`Posts`);
 
       // console.log(postList);
-      await (postList?.forEach((post) => {
-        if (post.author === user?.username) postRef.child(`${post.key}/author_avatar`).set(imageSrc);
+      await Promise.all(postList.map((post) => {
+        if (post.author === user?.username) realtimeDb.ref(`Posts`).child(`${post.key}/author_avatar`).set(imageSrc);
+        if (post.comments) {
+          // console.log(post.comments);
+          for (var key in post.comments) {
+            if (post.comments[key].username === user?.username) {
+              // console.log(post.comments[key].username, user?.username);
+              realtimeDb.ref(`Posts`).child(`${post.key}/comments/${post.comments[key].id}/avatar`).set(imageSrc);
+            }
+          }
+        }
       }));
 
     }
@@ -173,7 +181,7 @@ export default function EditProfile({ user, handleClose }) {
         className={fail}>不合格。</div>
       <div className="flex flex-col bg-white p-4 rounded width-post">
         <div className="p-4 py-5">
-          <Grid container justify="center" alignItems="center">
+          <Grid container justifyContent="center" alignItems="center">
             <input
               accept="image/*"
               id="contained-button-file"

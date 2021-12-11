@@ -1010,7 +1010,11 @@ video {
 }
 
 .grid-cols-3 {
-  grid-template-columns: 200px auto 200px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.grid-cols-3-new {
+  grid-template-columns: 10% auto 10%;
 }
 
 .grid-cols-4 {
