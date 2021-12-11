@@ -118,10 +118,9 @@ export default function ChangePost({ type, post, handleClose }) {
                 </label>
                 <label>
                     コンテンツ:
-                    <input
-                        type="text"
+                    <textarea
                         defaultValue={content}
-                        className="text-sm text-gray-base w-full mr-3 py-5 px-4 h-2 border border-gray-primary rounded mb-2"
+                        className="text-sm text-gray-base w-full mr-3 p-4 h-40 border border-gray-primary rounded mb-2"
                         onChange={({ target }) => setContent(target.value)}
                     />
                 </label>
