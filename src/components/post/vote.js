@@ -1,6 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowDropUpIcon from '@material-ui/icons/ArrowDropUp';
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import FirebaseContext from '../../context/firebase';
 import useCheckVotes from '../../hooks/use-check-votes';
 
@@ -62,11 +61,11 @@ export default function Vote({ user, content, linkdb }) {
     return (
         <>
         {isVoted === false &&
-            <ArrowDropUpIcon onClick={upvote} className="mr-1" />
+            <ThumbUpIcon onClick={upvote} className="mr-1 cursor-pointer rounded-full" label="Like"/>
         }
 
         {isVoted === true &&
-            <ArrowDropDownIcon onClick={downvote} className="mr-1" />
+            <ThumbUpIcon color="primary"  onClick={downvote} className="mr-1 cursor-pointer rounded-full" label="Like"/>
         }
 
         <div>{vote_num}</div>

@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import FirebaseContext from '../../context/firebase';
 import { useState, React, useContext, useEffect } from 'react';
@@ -65,7 +66,7 @@ export default function Footer({ votes, content }) {
                     <div>{commentNumbers}</div>
                 </div>
                 <div className="font-bold flex justify-center items-center">
-                    <GetAppIcon onClick={handleSave} className="cursor-pointer rounded-full" fontSize="large" style={save ? { backgroundColor: 'green', fill: 'white' } : {}} />
+                    <BookmarkIcon onClick={handleSave} className="cursor-pointer" fontSize="large" style={save ? { color: '#3f51b5' } : {}} /> 保存
                 </div>
             </div>
         </div>
