@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
-import GetAppIcon from '@material-ui/icons/GetApp';
 import FirebaseContext from '../../context/firebase';
 import { useState, React, useContext, useEffect } from 'react';
 import useUser from '../../hooks/use-user';
@@ -9,18 +8,17 @@ import UserContext from '../../context/user';
 import Vote from './vote';
 import { snapshotToArray } from '../../services/firebase';
 
-export default function Footer({ votes, content }) {
+export default function Footer({ content }) {
     const { user: loggedInUser } = useContext(UserContext);
     const { user } = useUser(loggedInUser?.uid);
     const { database } = useContext(FirebaseContext);
     const [commentNumbers, setCommentNumbers] = useState(0);
 
-    var saved;
     var com_num;
     const [save, setSave] = useState(false);
 
     const handleSave = async () => {
-        if (saved == null) await database.ref('Saves').child(`${user?.username}/${content?.key}`).set(1);
+        if (save === false) await database.ref('Saves').child(`${user?.username}/${content?.key}`).set(1);
         else await database.ref('Saves').child(`${user?.username}/${content?.key}`).remove();
     }
 
@@ -29,13 +27,16 @@ export default function Footer({ votes, content }) {
             await database
                 .ref(`Saves/${user?.username}/${content?.key}`)
                 .on('value', (snapshot) => {
-                    if (snapshot.val()) setSave(true);
-                    else setSave(false);
-                    saved = snapshot.val();
+                    if (snapshot.exists()) {
+                        setSave(true);
+                    } else {
+                        setSave(false);
+                    }
+                    // console.log(save);
                 });
         }
         getSaved();
-    }, saved);
+    }, [user?.username]);
 
     useEffect(() => {
         async function getCommentsNumbers() {
@@ -59,7 +60,7 @@ export default function Footer({ votes, content }) {
         <div className="p-4 pt-2 pb-1">
             <div className="grid grid-cols-3 text-2xl">
                 <div className="font-bold flex flex-row justify-center items-center">
-                    <Vote user={user} linkdb={'Posts'} content={content}/>
+                    <Vote user={user} linkdb={'Posts'} content={content} />
                 </div>
                 <div className="font-bold flex flex-row justify-center items-center">
                     <ChatBubbleOutlineIcon className="mr-1" />
