@@ -2,8 +2,10 @@ import { useState, React, useContext, useEffect } from 'react';
 import FirebaseContext from '../../context/firebase';
 import { Fab, Grid } from '@material-ui/core';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import useUser from '../../hooks/use-user';
 import UserContext from '../../context/user';
+import set from 'date-fns/set';
 
 export default function ChangePost({ type, post, handleClose }) {
     const { user: loggedInUser } = useContext(UserContext);
@@ -12,6 +14,8 @@ export default function ChangePost({ type, post, handleClose }) {
     const [content, setContent] = useState('');
     // const [imgPost, setImgPost] = useState('');
     const [imgSrc, setImgSrc] = useState('');
+    const [fileName, setFileName] = useState('');
+    const [fileSrc, setFileSrc] = useState('');
     const { database, storage } = useContext(FirebaseContext);
 
     const isInvalid = content === '' && title === '';
@@ -21,6 +25,8 @@ export default function ChangePost({ type, post, handleClose }) {
             setTitle(post.title);
             setContent(post.content);
             setImgSrc(post.image_url);
+            setFileSrc(post.file_url);
+            setFileName(post.file_name);
         }
     }, [])
 
@@ -33,6 +39,8 @@ export default function ChangePost({ type, post, handleClose }) {
                 content: content,
                 create_date: Date.now(),
                 image_url: imgSrc,
+                file_name: fileName,
+                file_url: fileSrc,
                 title: title,
             });
         window.location.reload();
@@ -51,6 +59,8 @@ export default function ChangePost({ type, post, handleClose }) {
                 create_date: Date.now(),
                 group: user?.group,
                 image_url: imgSrc,
+                file_name: fileName,
+                file_url: fileSrc,
                 title: title,
                 vote_numbers: 0
             })
@@ -68,6 +78,7 @@ export default function ChangePost({ type, post, handleClose }) {
 
         // console.log(event.target.files.length);
         if (event.target.files && event.target.files[event.target.files.length - 1]) {
+            setImgSrc('');
             let reader = new FileReader();
             // reader.onload = (e) => {
             //     setImgPost({ image: e.target.result });
@@ -79,11 +90,70 @@ export default function ChangePost({ type, post, handleClose }) {
             const fileRef = storageRef.child(`/posts/${urlName}`);
             fileRef.put(file).then(() => {
                 fileRef.getDownloadURL().then(function (url) {
+                    if (imgSrc !== '') {
+                        storage.refFromURL(imgSrc).delete().then(() => {
+                            console.log('success delete');
+                        }).catch((error) => {
+                            console.log('fail delete');
+                        });
+                    }
+                    // console.log(url);
                     setImgSrc(url);
                 });
             })
         }
     }
+
+    const onFileChange = (event) => {
+
+        // console.log(event.target.files.length);
+        if (event.target.files && event.target.files[event.target.files.length - 1]) {
+            setFileSrc('');
+            let reader = new FileReader();
+            // reader.onload = (e) => {
+            //     setImgPost({ image: e.target.result });
+            // };
+            reader.readAsDataURL(event.target.files[event.target.files.length - 1]);
+            const file = event.target.files[event.target.files.length - 1];
+            setFileName(file.name);
+            const storageRef = storage.ref();
+            let urlName = Date.now() + file.name;
+            const fileRef = storageRef.child(`/posts_file/${urlName}`);
+            fileRef.put(file).then(() => {
+                fileRef.getDownloadURL().then(function (url) {
+                    if (fileSrc !== '') {
+                        storage.refFromURL(fileSrc).delete().then(() => {
+                            console.log('success delete');
+                        }).catch((error) => {
+                            console.log('fail delete');
+                        });
+                    }
+                    setFileSrc(url);
+                    // console.log(fileName, fileSrc);
+                });
+            })
+        }
+    }
+
+    const handleCloseEvent = async () => {
+        if (type !== "編集") {
+            if (imgSrc !== '') {
+                storage.refFromURL(imgSrc).delete().then(() => {
+                    // console.log('success delete');
+                }).catch((error) => {
+                    // console.log('fail delete');
+                });
+            }
+            if (fileSrc !== '') {
+                storage.refFromURL(fileSrc).delete().then(() => {
+                    // console.log('success delete');
+                }).catch((error) => {
+                    // console.log('fail delete');
+                });
+            }
+        }
+        handleClose();
+    };
 
     return (
         <>
@@ -92,19 +162,38 @@ export default function ChangePost({ type, post, handleClose }) {
                     <Grid container justifyContent="center" alignItems="center">
                         <input
                             accept="image/*"
-                            id="contained-button-file"
+                            id="contained-button-image-file"
                             multiple
                             type="file"
                             onChange={onImageChange}
                             hidden={true}
                         />
-                        <label htmlFor="contained-button-file">
+                        <label htmlFor="contained-button-image-file">
                             <Fab component="span">
                                 <PhotoCamera />
                             </Fab>
                         </label>
                     </Grid>
-                    {imgSrc && <img id="target" className="padding-login" src={imgSrc} alt="" />}
+                    {imgSrc !== '' ? (<div className="padding-login flex items-center justify-center"><img id="target" src={imgSrc} alt="" /></div>) : null}
+                </div>
+
+                <div className="p-4 py-5">
+                    <Grid container justifyContent="center" alignItems="center">
+                        <input
+                            accept='.txt,.doc,.docx,.xml,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.pdf'
+                            id="contained-button-file"
+                            multiple
+                            type="file"
+                            onChange={onFileChange}
+                            hidden={true}
+                        />
+                        <label htmlFor="contained-button-file">
+                            <Fab component="span">
+                                <CloudUploadIcon />
+                            </Fab>
+                        </label>
+                    </Grid>
+                    {fileSrc !== '' ? (<div className="padding-login flex items-center justify-center"><a href={fileSrc} download>{fileName}</a></div>) : null}
                 </div>
 
                 <label>
@@ -125,14 +214,14 @@ export default function ChangePost({ type, post, handleClose }) {
                     />
                 </label>
                 <div>
-                    <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'} `}
+                    <button className={`bg-blue-medium text-white w-45 rounded h-8 font-bold ${isInvalid && 'opacity-50'} `}
                         disabled={isInvalid}
                         onClick={type === "編集" ? (handleUpdate) : (handlePost)}> {type}
                     </button>
                     <a className={`pt-1`}> </a>
 
-                    <button className={` bg-blue-medium text-white w-45 rounded h-8 font-bold`}
-                        onClick={handleClose}
+                    <button className={`bg-red-medium text-white w-45 rounded h-8 font-bold`}
+                        onClick={handleCloseEvent}
                     > キャンセル
                     </button>
                 </div>

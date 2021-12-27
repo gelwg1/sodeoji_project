@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
 
-export default function Body({ postId, title, content }) {
+export default function Body({ fileName, fileUrl, postId, title, content }) {
 
-  
+
 
   return (
     <div className="p-4 pt-2 pb-1">
@@ -10,6 +10,12 @@ export default function Body({ postId, title, content }) {
         {title}
       </a>
       <p className="text-sm">{content}</p>
+      <div>
+        添付ファイル:
+        <a href={fileUrl} download>
+          {fileName}
+        </a>
+      </div>
     </div>
   );
 }
