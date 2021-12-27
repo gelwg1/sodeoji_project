@@ -24,7 +24,7 @@ export default function Vote({ user, content, linkdb }) {
                 });
         }
         getVotes();
-    }, [vote_numbers]);
+    }, []);
 
     const upvote = async (event) => {
         event.preventDefault();
