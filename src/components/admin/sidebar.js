@@ -21,10 +21,7 @@ export default function Sidebar() {
                     </Navbar>
                     <Navbar className="bg-blue-medium mx-auto w-full mt-4">
                         <Container className="flex flex-col justify-center items-center">
-                            <Navbar.Brand>
-                                <button className="text-white text-xl" href={ROUTES.ADMIN_QUIZZ}>
-                                クイズ
-                                </button></Navbar.Brand>
+                            <Navbar.Brand className="text-white text-xl" href={`/admin/quizz`}>クイズ</Navbar.Brand>
                         </Container>
                     </Navbar>
                     

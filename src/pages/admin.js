@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/header';
-import Timeline from '../components/timeline';
 import useUser from '../hooks/use-user';
 import LoggedInUserContext from '../context/logged-in-user';
 import Sidebar from '../components/admin/sidebar'
@@ -21,7 +20,16 @@ export default function Dashboard({ user: loggedInUser }) {
         <Header />
         <div className="grid grid-cols-3-new">
           <Sidebar />
-          
+          {type === 'quizz' &&
+            <div>
+            day la quizz
+            </div> 
+          }
+          {!type  &&
+            <div>
+            day la user
+            </div> 
+          }
         </div>
       </div>
     </LoggedInUserContext.Provider >

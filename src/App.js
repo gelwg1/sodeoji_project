@@ -11,7 +11,6 @@ const Login = lazy(() => import('./pages/login'));
 const SignUp = lazy(() => import('./pages/sign-up'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
 const Admin = lazy(() => import('./pages/admin'));
-const AdminQuizz = lazy(() => import('./pages/admin_quizz'));
 const Profile = lazy(() => import('./pages/profile'));
 const EditProfile = lazy(() => import('./pages/edit-profile'));
 const NotFound = lazy(() => import('./pages/not-found'));
@@ -44,8 +43,6 @@ export default function App() {
             </ProtectedRoute>
             <ProtectedRoute user={user} path={`${ROUTES.ADMIN}/:type?/:param2?`} exact>
               <Admin />
-            </ProtectedRoute><ProtectedRoute user={user} path={`${ROUTES.ADMIN_QUIZZ}/:type?/:param2?`} exact>
-              <AdminQuizz />
             </ProtectedRoute>
             <Route component={NotFound} />
           </Switch>
