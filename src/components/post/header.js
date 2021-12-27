@@ -19,9 +19,11 @@ const DialogActions = withStyles((theme) => ({
 export default function Header({ username, avatarSrc, date, content }) {
   const { user: loggedInUser } = useContext(UserContext);
   const { user } = useUser(loggedInUser?.uid);
-  const { database } = useContext(FirebaseContext);
+  const { database, storage } = useContext(FirebaseContext);
 
   const handleDelete = async () => {
+    storage.refFromURL(content.image_url).delete();
+    storage.refFromURL(content.file_url).delete();
     await database.ref('Posts').child(content.key).remove();
     window.location.reload();
   };
