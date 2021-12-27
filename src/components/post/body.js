@@ -10,14 +10,12 @@ export default function Body({ fileName, fileUrl, postId, title, content }) {
         {title}
       </a>
       <p className="text-sm">{content}</p>
-      {fileUrl ? (
-        <div>添付ファイル:
-          <a href={fileUrl} download>
-            {fileName}
-          </a>
-        </div>
-      ) : null}
-      <p />
+      <div>
+        添付ファイル:
+        <a href={fileUrl} download>
+          {fileName}
+        </a>
+      </div>
     </div>
   );
 }
