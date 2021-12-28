@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Header from '../components/header';
 import useUser from '../hooks/use-user';
+import Quizz from '../components/admin/Quizz';
 import LoggedInUserContext from '../context/logged-in-user';
 import Sidebar from '../components/admin/sidebar'
 import { useParams } from "react-router-dom";
@@ -21,9 +22,7 @@ export default function Dashboard({ user: loggedInUser }) {
         <div className="grid grid-cols-3-new">
           <Sidebar />
           {type === 'quizz' &&
-            <div>
-            day la quizz
-            </div> 
+            <Quizz />
           }
           {!type  &&
             <div>
