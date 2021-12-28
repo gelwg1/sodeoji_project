@@ -24,11 +24,10 @@ export default function Vote({ user, content, linkdb }) {
                 });
         }
         getVotes();
-    }, [vote_numbers]);
+    }, []);
 
     const upvote = async (event) => {
         event.preventDefault();
-        console.log('vote: ' + `${linkdb}/${content?.key}`);
         await database
             .ref('Votes')
             .push({
