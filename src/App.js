@@ -10,6 +10,7 @@ import ProtectedRoute from './helpers/protected-route';
 const Login = lazy(() => import('./pages/login'));
 const SignUp = lazy(() => import('./pages/sign-up'));
 const Dashboard = lazy(() => import('./pages/dashboard'));
+const Admin = lazy(() => import('./pages/admin'));
 const Profile = lazy(() => import('./pages/profile'));
 const EditProfile = lazy(() => import('./pages/edit-profile'));
 const NotFound = lazy(() => import('./pages/not-found'));
@@ -39,6 +40,9 @@ export default function App() {
             <Route path={ROUTES.EDIT_PROFILE} component={EditProfile} />
             <ProtectedRoute user={user} path={`${ROUTES.DASHBOARD}/:type?/:param2?`} exact>
               <Dashboard />
+            </ProtectedRoute>
+            <ProtectedRoute user={user} path={`${ROUTES.ADMIN}/:type?/:param2?`} exact>
+              <Admin />
             </ProtectedRoute>
             <Route component={NotFound} />
           </Switch>

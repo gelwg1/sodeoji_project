@@ -52,6 +52,7 @@ export async function getPosts(type, param2, user) {
     .once("value");
 
   var result = snapshotToArray(snapshot);
+  console.log(result);
   switch (type) {
     case "post-details":
       result = await Promise.all(result.filter((item) => {
