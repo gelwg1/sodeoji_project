@@ -4,17 +4,38 @@ import UserContext from '../../context/user';
 import useUser from '../../hooks/use-user';
 import FirebaseContext from '../../context/firebase';
 
+import Dialog from '@material-ui/core/Dialog';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import { withStyles } from '@material-ui/core/styles';
+import MakeQuiz from './MakeQuiz';
+
+const DialogActions = withStyles((theme) => ({
+    root: {
+        margin: 10,
+        padding: theme.spacing(1),
+    },
+}))(MuiDialogActions);
+
 export default function Quizz() {
     const { user: loggedInUser } = useContext(UserContext);
     const { user } = useUser(loggedInUser?.uid);
     const [quizz, setQuizz] = useState([]);
     const { database } = useContext(FirebaseContext);
+    const [open, setOpen] = useState(false);
 
     const handleStop = async (e) => {
         await database.ref('Quizs').child(e.target.value).update({active: 0});
     }
     const handleActive = async (e) => {
         await database.ref('Quizs').child(e.target.value).update({active: 1});
+    }
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    }
+
+    const handleClose = () => { 
+        setOpen(false);
     }
 
     useEffect(() => {
@@ -39,7 +60,12 @@ export default function Quizz() {
             
             <div className='m5 row w-90'>
                 <div className='col-md-7'>
-                    <button type="button" className="btn btn-light border border-dark rounded">新しいクイズを作成</button>
+                    <button type="button" className="btn btn-light border border-dark rounded" onClick={handleClickOpen}>新しいクイズを作成</button>
+                    <Dialog open={open} maxWidth={'xl'} fullWidth={true}>
+                        <DialogActions>
+                            <MakeQuiz type="作成" handleClose={handleClose} />
+                        </DialogActions>
+                    </Dialog>
                 </div>
                 <div className='col-md-5'>
                     <input type="text" class="form-control" id="search_quizz" name="username" placeholder='検索'></input>
