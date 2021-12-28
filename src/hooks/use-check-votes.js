@@ -10,12 +10,12 @@ export default function useCheckVotes(uid, post_id) {
   useEffect(() => {
     async function check(uid, post_id) {
         let result;
-        await database.ref('Votes').orderByChild('user_id').equalTo(uid).on("value", snapshot => {
+        await database.ref('Votes').orderByChild('post_id').equalTo(post_id).once("value", snapshot => {
+            setIsVoted(false);
             if (snapshot.exists()) {
-                setIsVoted(false);
                 result = snapshotToArray(snapshot);
                 result.forEach(element => { 
-                    if (element?.post_id === post_id) {
+                    if (element?.user_id === uid) {
                         setIsVoted(true);
                         setId(element?.key);
                     }
@@ -30,7 +30,7 @@ export default function useCheckVotes(uid, post_id) {
     if (uid && post_id) {
         check(uid, post_id);
     }
-  }, [uid,post_id, database]);
+  }, [uid,post_id, database.ref('Votes')]);
 
   return { isVoted, id, setIsVoted };
 }
