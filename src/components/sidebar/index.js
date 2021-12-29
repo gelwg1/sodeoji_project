@@ -30,15 +30,20 @@ export default function Sidebar() {
     };
     return (
         <div className="bg-white h-screen w-full border-gray-primary border flex flex-col items-center sticky">
-            <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+            <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
                 <Container className="flex flex-col justify-center items-center">
                     <Navbar.Brand className="text-white text-xl" href={ROUTES.DASHBOARD}>ホーム</Navbar.Brand>
+                </Container>
+            </Navbar>
+            <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
+                <Container className="flex flex-col justify-center items-center">
+                    <Navbar.Brand className="text-white text-xl" href={ROUTES.QUIZ}>クイズ</Navbar.Brand>
                 </Container>
             </Navbar>
             <hr className="w-full mt-4" />
             {window.location.pathname.includes(ROUTES.DASHBOARD) ? (
                 <>
-                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
                         <Container className="flex flex-col justify-center items-center">
                             <Navbar.Brand>
                                 <button className="text-white text-xl" onClick={handleClickOpen}>
@@ -57,19 +62,42 @@ export default function Sidebar() {
                             <Navbar.Brand className="text-xl">ポストフィルター</Navbar.Brand>
                         </Container>
                     </Navbar>
-                    <Navbar className="bg-blue-medium mx-auto w-full mt-2">
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-2">
                         <Container className="flex flex-col justify-center items-center">
                             <Navbar.Brand className="text-white text-xl" href={ROUTES.DASHBOARD}>全てのポスト</Navbar.Brand>
                         </Container>
                     </Navbar>
-                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
                         <Container className="flex flex-col justify-center items-center">
                             <Navbar.Brand className="text-white text-xl" href={`/dashboard/post/${user?.username}`}>私のポスト</Navbar.Brand>
                         </Container>
                     </Navbar>
-                    <Navbar className="bg-blue-medium mx-auto w-full mt-4">
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
                         <Container className="flex flex-col justify-center items-center">
                             <Navbar.Brand className="text-white text-xl" href={`/dashboard/save/${user?.username}`}>保存ポスト</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                </>
+            ) : window.location.pathname.includes(ROUTES.QUIZ) ? (
+                <>
+                <Navbar className="mx-auto w-full mt-2">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-xl">クイズフィルター</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-2">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={ROUTES.QUIZ_OPENNING}>オープニング</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={ROUTES.QUIZ_CLOSE}>終わった</Navbar.Brand>
+                        </Container>
+                    </Navbar>
+                    <Navbar bg="primary" className="bg-blue-medium mx-auto w-full mt-4">
+                        <Container className="flex flex-col justify-center items-center">
+                            <Navbar.Brand className="text-white text-xl" href={`/quiz/done/${user?.username}`}>完了</Navbar.Brand>
                         </Container>
                     </Navbar>
                 </>
