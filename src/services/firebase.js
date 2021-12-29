@@ -75,7 +75,7 @@ export async function getPosts(type, param2, user) {
       break;
     default:
       result = await Promise.all(result.filter((item) => {
-        return (user?.group === item.group)
+        return (user?.group === item.group || item.active === "all")
       }));
       break;
   }

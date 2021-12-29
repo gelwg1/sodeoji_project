@@ -16,6 +16,7 @@ export default function ChangePost({ type, post, handleClose }) {
     const [imgSrc, setImgSrc] = useState('');
     const [fileName, setFileName] = useState('');
     const [fileSrc, setFileSrc] = useState('');
+    const [active, setActive] = useState('group');
     const { database, storage } = useContext(FirebaseContext);
 
     const isInvalid = content === '' && title === '';
@@ -27,6 +28,7 @@ export default function ChangePost({ type, post, handleClose }) {
             setImgSrc(post.image_url);
             setFileSrc(post.file_url);
             setFileName(post.file_name);
+            setActive(post?.active);
         }
     }, [])
 
@@ -36,6 +38,7 @@ export default function ChangePost({ type, post, handleClose }) {
             .ref('Posts')
             .child(post.key)
             .update({
+                active: active,
                 content: content,
                 create_date: Date.now(),
                 image_url: imgSrc,
@@ -52,6 +55,7 @@ export default function ChangePost({ type, post, handleClose }) {
         var postId = database
             .ref('Posts')
             .push({
+                active: active,
                 postId: user?.username,
                 author: user?.username,
                 author_avatar: user?.avatar,
@@ -195,6 +199,13 @@ export default function ChangePost({ type, post, handleClose }) {
                     </Grid>
                     {fileSrc !== '' ? (<div className="padding-login flex items-center justify-center"><a href={fileSrc} download>{fileName}</a></div>) : null}
                 </div>
+                <label>
+                    表示:
+                    <select class="form-select mb-2" aria-label="Default select example" defaultValue={active}  onChange={({ target }) => setActive(target.value)}>
+                    <option value="all">全部グループ</option>
+                    <option value="group">ユーザーのグループ</option>
+                    </select>
+                </label>
 
                 <label>
                     タイトル:
