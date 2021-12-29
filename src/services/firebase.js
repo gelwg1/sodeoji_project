@@ -67,7 +67,7 @@ export async function getPosts(type, param2, user) {
       const saved_snapshot = await database
         .ref(`Saves/${user?.username}`)
         .once('value');
-        const saved = saved_snapshot.val();
+      const saved = saved_snapshot.val();
       result = await Promise.all(result.filter((item) => {
         return (saved != null && saved[`${item.key}`]);
       }));
@@ -137,3 +137,36 @@ export async function updateAvatar(
     }
   );
 };
+
+export async function getQuizs(user, type, param2) {
+  const snapshot = await database
+    .ref('Quizs')
+    .once("value");
+
+  // console.log(type);
+  var result = snapshotToArray(snapshot);
+  switch (type) {
+    case "openning":
+      result = await Promise.all(result.filter((item) => {
+        // console.log(item);
+        return item.active === 1;
+      }));
+      break;
+    case "close":
+      result = await Promise.all(result.filter((item) => {
+        // console.log(item);
+        return item.active === 0;
+      }));
+      break;
+    case "done":
+      result = await Promise.all(result.filter((item) => {
+        // console.log(item);
+        return item.done_user[`${user?.username}`] === param2;
+      }));
+      break;
+    default:
+      break;
+  }
+
+  return result;
+}

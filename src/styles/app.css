@@ -784,7 +784,7 @@ video {
 }
 
 .max-w-screen-lg {
-  max-width: 1024px;
+  width: 1024px;
 }
 
 .opacity-25 {
@@ -891,6 +891,10 @@ video {
 
 .text-center {
   text-align: center;
+}
+
+.text-end {
+  text-align: end;
 }
 
 .text-white {
@@ -1007,6 +1011,18 @@ video {
 
 .gap-8 {
   gap: 2rem;
+}
+
+.grid-ranking {
+  grid-template-columns: auto 10% 10% 30%;
+  grid-template-rows: auto auto auto auto auto;
+  grid-gap: 10px;
+}
+
+.grid-cols-2 {
+  grid-template-columns: 60% 40%;
+  grid-column-start: 1;
+  grid-column-end: 2;
 }
 
 .grid-cols-3 {
