@@ -1,4 +1,6 @@
 export const DASHBOARD = '/dashboard';
+export const ADMIN = '/admin';
+export const ADMIN_QUIZZ = '/admin/quizz';
 export const LOGIN = '/login';
 export const SIGN_UP = '/sign-up';
 export const PROFILE = '/p/:username';
