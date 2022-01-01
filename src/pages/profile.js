@@ -42,11 +42,32 @@ export default function Profile() {
       </div>
       <hr />
       <div className="show-profile-child">
-        <h3>名前 <span>{user.username}</span></h3>
+        <h3>名前</h3>
+        <span>{user.username}</span>
       </div>
-      <div className="show-profile-child last-child">
-        <h3>グループ <span>{user.group}</span></h3>
+
+      <div className="show-profile-child">
+        <h3>グループ</h3>
+        <span>{user.group}</span>
       </div>
+
+      <div className="show-profile-child">
+        <h3>ポスト</h3>
+        <span>{1000}</span>
+      </div>
+      <div className="show-profile-child">
+        <h3>点</h3>
+        <span>{20}</span>
+      </div>
+      <div className="show-profile-child">
+        <h3>共有したファイル</h3>
+        <span>{30}</span>
+      </div>
+      <div className="show-profile-child">
+        <h3>参加しましたクイズ</h3>
+        <span>{10}</span>
+      </div>
+      
     </div>
   </>
   ) : null;
